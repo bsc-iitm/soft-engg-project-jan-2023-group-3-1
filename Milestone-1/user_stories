@@ -2,34 +2,27 @@ Milestone 1:-
 
 The identified users for the problem statement are Students, Support Staff and Admins. They are categorized as primary, secondary and tertiary users respectively. 
 
-Student: 
-As a student, I want to be able to create a ticket for my specific concern or query, so that I can continue learning without any technical and administrative difficulties since this is an online degree. 
-
-Support Staff:
-As a member of the support staff, I would want to solve all the tickets which are addressed to me and notify the student post resolving, so that the student can clear his inhibitions and continue learning. 
-
-Admin:-
-As an admin, I want to be able to create a dynamic FAQ list, so that it will be useful to future students and also decrease the burden of tickets on the support staff. 
-
-
-
-
 Student (Primary User):
 
-    1. As a student, I want to be able to access a list of existing tickets and upvote the desired ticket, so that I can be notified when that query is answered.
-    2. As a student, I want to be able to raise a ticket in the desired category, so that the support staff can attend to my concern.
+    1. As a student, I want to be able to create a ticket for my specific concern or query, so that I can continue learning without any technical and 
+       administrative difficulties since this is an online degree.
+    2. As a student, I want to be able to access a list of existing tickets and upvote the desired ticket, so that I can be notified when that query is answered.
     3. As a student, I want to be able to access the dynamic FAQ’s page, so that I can see if my query has been addressed already.
-    4. As a student, I want to be able to access the Important Links page, so that I can browse through content easily without the need for creating a query.
+    4. As a student, I want to be able to access the Important Links page, so that I can browse through content easily without the need for creating a query.  
+    5. As a student, I want to be able to close my tickets if they are no longer needed in order to reduce the work of the support staff.
 
 Support staff (Secondary User):
 
-    1. As a support staff member, I want to filter and address the tickets based on the category,  so that I can answer the queries which need immediate attention.
+    1. As a member of the support staff, I would want to solve all the tickets which are addressed to me and notify the student post resolving, so that the student
+       can clear his inhibitions and continue learning.
+    2. As a member of the support staff, I would like to be able to close tickets at any time in case they have already been solved in order to avoid working on solved issues again.
 
 Support Admin (Tertiary User):
 
+    1. As an admin, I want to be able to create a dynamic FAQ list, so that it will be useful to future students and also decrease the burden of 
+       tickets on the support staff. 
     1. As a support admin, I want to be able to update the dynamic FAQ’s page, so that the students can get their doubts clarified without raising a ticket.
     2. As a support admin, I want to be able to update the important links page, so that the students can refer to various resources without raising a ticket.
-    3. As a support admin, I want to be able to create categories for tickets, so that the student can raise a ticket under their desired category.
 
 
 
