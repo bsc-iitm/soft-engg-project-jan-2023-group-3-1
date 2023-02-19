@@ -12,3 +12,24 @@ Admin:-
 As an admin, I want to be able to create a dynamic FAQ list, so that it will be useful to future students and also decrease the burden of tickets on the support staff. 
 
 
+
+
+Student (Primary User):
+
+    1. As a student, I want to be able to access a list of existing tickets and upvote the desired ticket, so that I can be notified when that query is answered.
+    2. As a student, I want to be able to raise a ticket in the desired category, so that the support staff can attend to my concern.
+    3. As a student, I want to be able to access the dynamic FAQ’s page, so that I can see if my query has been addressed already.
+    4. As a student, I want to be able to access the Important Links page, so that I can browse through content easily without the need for creating a query.
+
+Support staff (Secondary User):
+
+    1. As a support staff member, I want to filter and address the tickets based on the category,  so that I can answer the queries which need immediate attention.
+
+Support Admin (Tertiary User):
+
+    1. As a support admin, I want to be able to update the dynamic FAQ’s page, so that the students can get their doubts clarified without raising a ticket.
+    2. As a support admin, I want to be able to update the important links page, so that the students can refer to various resources without raising a ticket.
+    3. As a support admin, I want to be able to create categories for tickets, so that the student can raise a ticket under their desired category.
+
+
+
