@@ -156,18 +156,20 @@ properties:
 
 /delete:
 --------
-summary: Delete a ticket
-description: Allows a support staff member to delete a ticket if it is no longer needed or relevant
-parameters:
-  - in: path
-    name: ticket_id
-    description: The ID of the ticket to delete
-    required: true
-    schema:
-      type: string
-responses:
-  '204':
-    description: No Content
+
+delete: 
+    summary: Delete a ticket
+    description: Allows a support staff member to delete a ticket if it is no longer needed or relevant
+    parameters:
+      - in: path
+        name: ticket_id
+        description: The ID of the ticket to delete
+        required: true
+        schema:
+          type: string
+    responses:
+      '204':
+        description: No Content
 
 /tickets/upvote:
 ----------------
