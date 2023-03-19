@@ -1,0 +1,236 @@
+---
+openapi: 3.0.0
+info:
+  title: Online Degree Support System API
+  version: 1.0.0
+paths:
+  /tickets:
+    post:
+      summary: Create a new ticket
+      description: Allows a student to create a new ticket for a specific concern or query
+      requestBody:
+        description: Ticket data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                student_id:
+                  type: string
+                  description: The ID of the student creating the ticket
+                title:
+                  type: string
+                  description: The title of the ticket
+                description:
+                  type: string
+                  description: The description of the ticket
+              required:
+                - student_id
+                - title
+                - description
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the created ticket
+                  student_id:
+                    type: string
+                    description: The ID of the student who created the ticket
+                  title:
+                    type: string
+                    description: The title of the ticket
+                  description:
+                    type: string
+                    description: The description of the ticket
+                  upvotes:
+                    type: integer
+                    description: The number of upvotes for the ticket
+                  status:
+                    type: string
+                    description: The status of the ticket
+                    enum: [open, closed]
+    get:
+      summary: Get all tickets
+      description: Allows a student to access a list of existing tickets and upvote the desired ticket
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The ID of the ticket
+                    student_id:
+                      type: string
+                      description: The ID of the student who created the ticket
+                    title:
+                      type: string
+                      description: The title of the ticket
+                    description:
+                      type: string
+                      description: The description of the ticket
+                    upvotes:
+                      type: integer
+                      description: The number of upvotes for the ticket
+                    status:
+                      type: string
+                      description: The status of the ticket
+                      enum: [open, closed]
+    /{ticket_id}:
+      patch:
+        summary: Update ticket status
+        description: Allows a support staff member to close a ticket once it has been solved
+        parameters:
+          - in: path
+            name: ticket_id
+            description: The ID of the ticket to update
+            required: true
+            schema:
+              type: string
+        requestBody:
+          description: Ticket data
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The new status of the ticket
+                    enum: [open, closed]
+              required:
+                - status
+        responses:
+          '200':
+            description: OK
+      get:
+        summary: Get ticket details
+        description: Allows a student or support staff member to access the details of a specific ticket
+        parameters:
+          - in: path
+            name: ticket_id
+            description: The ID of the ticket to get
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+              Schema:
+type: object
+properties:
+  id:
+    type: string
+    description: The ID of the ticket
+  student_id:
+    type: string
+    description: The ID of the student who created the ticket
+  title:
+    type: string
+    description: The title of the ticket
+  description:
+    type: string
+    description: The description of the ticket
+  upvotes:
+    type: integer
+    description: The number of upvotes for the ticket
+  status:
+    type: string
+    description: The status of the ticket
+    enum: [open, closed]
+
+/delete:
+--------
+summary: Delete a ticket
+description: Allows a support staff member to delete a ticket if it is no longer needed or relevant
+parameters:
+  - in: path
+    name: ticket_id
+    description: The ID of the ticket to delete
+    required: true
+    schema:
+      type: string
+responses:
+  '204':
+    description: No Content
+
+/tickets/upvote:
+----------------
+patch:
+  summary: Upvote a ticket
+  description: Allows a student to upvote a ticket
+  requestBody:
+    description: Upvote data
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            ticket_id:
+              type: string
+              description: The ID of the ticket to upvote
+              required:
+                - ticket_id
+  responses:
+    '200':
+      description: OK
+
+get:
+  summary: Get most upvoted tickets
+  description: Allows a student to access a list of the most upvoted tickets
+  parameters:
+    - in: query
+      name: limit
+      description: The maximum number of tickets to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: The ID of the ticket
+                student_id:
+                  type: string
+                  description: The ID of the student who created the ticket
+                title:
+                  type: string
+                  description: The title of the ticket
+                description:
+                  type: string
+                  description: The description of the ticket
+                upvotes:
+                  type: integer
+                  description: The number of upvotes for the ticket
+                status:
+                  type: string
+                  description: The status of the ticket
+                  enum: [open, closed]
+
+              
