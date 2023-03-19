@@ -232,5 +232,58 @@ get:
                   type: string
                   description: The status of the ticket
                   enum: [open, closed]
+                  
+                  
+
+paths:
+  /faqs:
+    get:
+      summary: Returns a list of all frequently asked questions.
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Creates a new frequently asked question.
+      responses:
+        '201':
+          description: Created
+  /faqs/{id}:
+    get:
+      summary: Returns a specific frequently asked question by ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the frequently asked question to retrieve.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: Updates an existing frequently asked question by ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the frequently asked question to update.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: Deletes a frequently asked question by ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the frequently asked question to delete.
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+
 
               
