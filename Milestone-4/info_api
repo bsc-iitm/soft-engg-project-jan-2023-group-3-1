@@ -14,3 +14,5 @@ POST /faqs: Creates a new frequently asked question.
 PUT /faqs/{id}: Updates an existing frequently asked question by ID.
 DELETE /faqs/{id}: Deletes a frequently asked question by ID.
 
+POST /tickets/{ticket_id}/answer: Allows a support staff member to answer a ticket by providing the ticket ID and the answer details in the request body. Returns the updated ticket information.
+PUT /tickets/{ticket_id}/answer/{answer_id}: Allows a support staff member to update an existing answer for a ticket by providing the ticket ID, answer ID, and the updated answer details in the request body. Returns the updated answer information.
