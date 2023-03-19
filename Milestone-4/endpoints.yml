@@ -110,8 +110,6 @@ paths:
                     type: string
                     description: The new status of the ticket
                     enum: [open, closed]
-              required:
-                - status
         responses:
           '200':
             description: OK
@@ -130,28 +128,28 @@ paths:
             description: OK
             content:
               application/json:
-              Schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the ticket
-                  student_id:
-                    type: string
-                    description: The ID of the student who created the ticket
-                  title:
-                    type: string
-                    description: The title of the ticket
-                  description:
-                    type: string
-                    description: The description of the ticket
-                  upvotes:
-                    type: integer
-                    description: The number of upvotes for the ticket
-                  status:
-                    type: string
-                    description: The status of the ticket
-                    enum: [open, closed]
+                Schema:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The ID of the ticket
+                    student_id:
+                      type: string
+                      description: The ID of the student who created the ticket
+                    title:
+                      type: string
+                      description: The title of the ticket
+                    description:
+                      type: string
+                      description: The description of the ticket
+                    upvotes:
+                      type: integer
+                      description: The number of upvotes for the ticket
+                    status:
+                      type: string
+                      description: The status of the ticket
+                      enum: [open, closed]
       delete:
         summary: Delete a ticket
         description: Allows a support staff member to delete a ticket if it is no longer needed or relevant
@@ -321,5 +319,3 @@ paths:
       responses:
         '204':
           description: No Content
-
-              
