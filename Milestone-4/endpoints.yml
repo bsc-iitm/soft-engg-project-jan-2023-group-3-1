@@ -88,7 +88,7 @@ paths:
                       description: The status of the ticket
                       enum: [open, closed]
   /{ticket_id}:
-      patch:
+      put:
         summary: Update ticket status
         description: Allows a support staff member to close a ticket once it has been solved
         parameters:
@@ -164,7 +164,7 @@ paths:
           '204':
             description: No Content
   /tickets/upvote:
-    patch:
+    put:
       summary: Upvote a ticket
       description: Allows a student to upvote a ticket
       requestBody:
