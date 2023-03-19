@@ -233,9 +233,6 @@ get:
                   description: The status of the ticket
                   enum: [open, closed]
                   
-                  
-
-paths:
   /faqs:
     get:
       summary: Returns a list of all frequently asked questions.
