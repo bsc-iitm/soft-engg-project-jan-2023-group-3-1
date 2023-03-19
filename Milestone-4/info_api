@@ -7,3 +7,10 @@ PATCH /{ticket_id} - Allows a support staff member to update the status of a sup
 DELETE /{ticket_id} - Allows a support staff member to delete a support ticket by providing the ticket ID. Returns no content.
 PATCH /tickets/upvote - Allows a student to upvote a support ticket by providing the ticket ID. Returns no content.
 GET /tickets/upvote - Allows a student to view a list of the most upvoted support tickets, with a maximum number of tickets to return specified by the "limit" parameter. Returns the ID, student ID, title, description, upvotes, and status of the ticket.
+
+GET /faqs: Returns a list of all frequently asked questions.
+GET /faqs/{id}: Returns a specific frequently asked question by ID.
+POST /faqs: Creates a new frequently asked question.
+PUT /faqs/{id}: Updates an existing frequently asked question by ID.
+DELETE /faqs/{id}: Deletes a frequently asked question by ID.
+
