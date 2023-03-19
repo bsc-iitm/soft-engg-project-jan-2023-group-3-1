@@ -233,6 +233,54 @@ get:
                   description: The status of the ticket
                   enum: [open, closed]
                   
+  /tickets/{id}/answer:
+  post:
+    summary: Answer a support ticket
+    description: Allows a support staff member to answer a support ticket by providing the ticket ID and answer details.
+    parameters:
+      - name: id
+        in: path
+        description: ID of the ticket to answer
+        required: true
+        schema:
+          type: integer
+      - name: answer
+        in: body
+        description: Answer details
+        required: true
+        schema:
+          type: object
+          properties:
+            answer:
+              type: string
+    responses:
+      200:
+        description: OK
+
+/tickets/{id}/answer:
+  put:
+    summary: Update an answer for a given ticket
+    description: Allows a support staff member to update an answer for a given ticket by providing the ticket ID and updated answer details.
+    parameters:
+      - name: id
+        in: path
+        description: ID of the ticket to update answer for
+        required: true
+        schema:
+          type: integer
+      - name: answer
+        in: body
+        description: Updated answer details
+        required: true
+        schema:
+          type: object
+          properties:
+            answer:
+              type: string
+    responses:
+      200:
+        description: OK
+                  
   /faqs:
     get:
       summary: Returns a list of all frequently asked questions.
