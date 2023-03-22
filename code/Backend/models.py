@@ -52,6 +52,7 @@ class tickets_users(db.Model):
     id = db.Column(db.Integer,db.ForeignKey('Users.id'),nullable=False,primary_key=True)
 
 class faqs(db.Model):
-    f_id = db.Column(db.Integer, nullable=False)
+    __tablename__ = "faqs"
+    f_id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True)
     question = db.Column(db.String, nullable=False)
     answer = db.Column(db.String, nullable=False)
