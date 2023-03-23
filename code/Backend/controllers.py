@@ -26,5 +26,6 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 @app.route('/',methods=['GET','POST'])
+@login_required
 def homepage():
     return redirect('http://192.168.1.5:8080/')
