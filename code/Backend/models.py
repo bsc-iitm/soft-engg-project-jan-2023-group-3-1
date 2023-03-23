@@ -1,7 +1,7 @@
 from .database import db
 from flask_security import UserMixin,RoleMixin
 
-class Users(db.Model,UserMixin):
+class User(db.Model,UserMixin):
     __tablename__ = "Users"
     id = db.Column(db.Integer,nullable=False,unique=True, primary_key=True,autoincrement=True)
     username = db.Column(db.String)
@@ -22,7 +22,7 @@ class user_role(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('Roles.role_id'),primary_key=True, nullable=False)
     id = db.Column(db.Integer,db.ForeignKey('Users.id'),nullable=False,primary_key=True)
 
-class Roles(db.Model,RoleMixin):
+class Role(db.Model,RoleMixin):
     __tablename__ = 'Roles'
     role_id = db.Column(db.Integer,nullable=False,unique=True, primary_key=True)
     name = db.Column(db.String)

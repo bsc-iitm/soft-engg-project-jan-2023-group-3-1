@@ -1,9 +1,8 @@
 from flask_security import (
         RegisterForm,
-        Security,
         unique_identity_attribute,
     )
-from wtforms import StringField, ValidationError, validators, SelectField
+from wtforms import validators, SelectField
 
 choices = {
             'Student':'student',\
@@ -18,6 +17,3 @@ class Registerform_roles(RegisterForm):
                         ],\
                         choices=['Student','Support Staff','Admin']
                     )
-    
-    
-    
