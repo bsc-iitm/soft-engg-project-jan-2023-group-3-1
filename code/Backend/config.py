@@ -14,8 +14,8 @@ class Config():
     CELERY_RESULT_BACKEND = "redis://localhost:6379/2"
 
 class LocalDevelopmentConfig(Config):
-    SQLITE_DB_DIR = os.path.join(basedir,"../db_directory")
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///database.sqlite3'
+    SQLITE_DB_DIR = os.path.join(basedir, "../db_directory")
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(SQLITE_DB_DIR, "database.sqlite3")
     DEBUG = True 
     SECRET_KEY = "lk2234bnak9ksf9lwer"
     SECURITY_PASSWORD_HASH = "bcrypt"

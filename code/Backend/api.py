@@ -26,3 +26,4 @@ class BError(HTTPException):
   "error_message": errormsg
 }
         self.response = make_response(json.dumps(message), status_code)
+
