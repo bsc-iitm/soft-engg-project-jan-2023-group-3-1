@@ -2,7 +2,7 @@ from .database import db
 from flask_security import UserMixin,RoleMixin
 
 class User(db.Model,UserMixin):
-    __tablename__ = "Users"
+    __tablename__ = "User"
     id = db.Column(db.Integer,nullable=False,unique=True, primary_key=True,autoincrement=True)
     username = db.Column(db.String)
     email = db.Column(db.String, nullable=False)
@@ -10,7 +10,7 @@ class User(db.Model,UserMixin):
     fs_uniquifier = db.Column(db.String,unique=True, nullable=False)
     active = db.Column(db.Boolean())
     
-    roles= db.relationship('Roles',secondary="user_role",backref=db.backref('users',lazy='dynamic'))
+    roles= db.relationship('Role',secondary="user_role",backref=db.backref('users',lazy='dynamic'))
     
     #This funcion will return a row in the query as a dictionary.
     def as_dict(self):
@@ -19,11 +19,11 @@ class User(db.Model,UserMixin):
 # This is a secondary table linking the users to their roles.
 class user_role(db.Model):
     __tablename__ = 'user_role'
-    role_id = db.Column(db.Integer, db.ForeignKey('Roles.role_id'),primary_key=True, nullable=False)
-    id = db.Column(db.Integer,db.ForeignKey('Users.id'),nullable=False,primary_key=True)
+    role_id = db.Column(db.Integer, db.ForeignKey('Role.role_id'),primary_key=True, nullable=False)
+    id = db.Column(db.Integer,db.ForeignKey('User.id'),nullable=False,primary_key=True)
 
 class Role(db.Model,RoleMixin):
-    __tablename__ = 'Roles'
+    __tablename__ = 'Role'
     role_id = db.Column(db.Integer,nullable=False,unique=True, primary_key=True)
     name = db.Column(db.String)
     Description = db.Column(db.String) 
@@ -49,7 +49,7 @@ class Tickets(db.Model):
 class tickets_users(db.Model):
     __tablename__ = 'tickets_users'
     ticket_id = db.Column(db.Integer, db.ForeignKey('Tickets.ticket_id'),primary_key=True, nullable=False)
-    id = db.Column(db.Integer,db.ForeignKey('Users.id'),nullable=False,primary_key=True)
+    id = db.Column(db.Integer,db.ForeignKey('User.id'),nullable=False,primary_key=True)
 
 class faqs(db.Model):
     __tablename__ = "faqs"

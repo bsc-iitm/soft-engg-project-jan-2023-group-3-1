@@ -12,7 +12,6 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(current_dir, 'database.sqlite3')
 app.config.from_object(LocalDevelopmentConfig)
 db.init_app(app)
 api = Api(app)
@@ -24,8 +23,7 @@ user_datastore =  SQLAlchemySessionUserDatastore(db.session,User,Role)
 
 from Backend.security_models import Registerform_roles
 
-security = Security(app, datastore=user_datastore,\
-                    register_form=Registerform_roles)
+security = Security(app, datastore=user_datastore)
 
 from Backend.controllers import *
 

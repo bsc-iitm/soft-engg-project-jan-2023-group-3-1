@@ -25,7 +25,26 @@ def dated_url_for(endpoint, **values):
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
 
+
 @app.route('/',methods=['GET','POST'])
 @login_required
 def homepage():
     return redirect('http://192.168.1.5:8080/')
+
+@app.route('/roleselect', methods=['GET','POST'])
+@login_required
+def role_select():
+    
+    if request.method == 'GET':
+        if flask_login.current_user.roles:
+            return "Role already assigned"
+        roles = Role.query.all()
+        return render_template("role_select.html",roles=roles)
+    
+    if request.method == 'POST':
+        role = request.form.get('role')
+        curr_id = flask_login.current_user.id
+        adding_relation = user_role(id = curr_id,role_id=role)
+        db.session.add(adding_relation)
+        db.session.commit()
+        return redirect('http://192.168.1.5:8080/')
