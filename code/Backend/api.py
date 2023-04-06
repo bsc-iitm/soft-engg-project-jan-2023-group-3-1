@@ -23,7 +23,7 @@ class Success(HTTPException):
         self.response = make_response(msg, status_code)
 
 class tickets_api:
-    def post():
+    def post(self):
         try:
             ticket_data = request.get_json()
             new_ticket = Tickets(
@@ -52,13 +52,13 @@ class tickets_api:
             'status': 'open'
         }), 201
 
-    def get():
+    def get(self):
         all_tickets = Tickets.query.all()
         res = []
         for ticket in all_tickets:
             res.append({
                 'ticket_id': ticket.ticket_id,
-                'student_id': ticket.users.first().id,
+                'user_id': ticket.users.first().id,
                 'title': ticket.title,
                 'description': ticket.description,
                 'upvotes': ticket.upvotes,
@@ -67,7 +67,7 @@ class tickets_api:
         return jsonify(res), 200
 
 class ticketid_api:
-    def put(ticket_id):
+    def put(self, ticket_id):
         ticket_data = request.get_json()
         curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
         
@@ -96,7 +96,7 @@ class ticketid_api:
             'status': curr_ticket.status
         }), 200
 
-    def get(ticket_id):
+    def get(self, ticket_id):
         curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
 
         if not curr_ticket:
@@ -120,26 +120,50 @@ class ticketid_api:
         return '', 204
 
 class Votes_api:
-    def put():
+    def put(self):
         upvote_data = request.get_json()
-        # Your code for upvoting the ticket goes here
-        # ...
+        
+        curr_ticket = Tickets.query.filter(Tickets.ticket_id == upvote_data.ticket_id)
+        upvoted = upvotes.query.filter(upvotes.id == current_user.id).filter(upvotes.ticket_id == upvote_data.ticket_id).first()
+        
+        if upvoted:
+            return DefaultError(status_code=409,desc="The post has already upvoted by the current user")
+        
+        curr_ticket.upvotes = Tickets.upvotes +1
+        user_upvote_rec = upvotes(id=current_user.id, ticket_id = curr_ticket.ticket_id)
+        
+        db.session.add(user_upvote_rec)
+        db.session.commit()
+        
         return '', 200
 
-    def get():
+    def get(self):
         limit = request.args.get('limit', default=10, type=int)
-        # Your code for getting the most upvoted tickets goes here
-        # ...
-        # Return the list of most upvoted tickets
-        return jsonify([
-            {
-                'id': 'ticket_id',
-                'student_id': 'student_id',
-                'title': 'ticket_title',
-                'description': 'ticket_description',
-                'upvotes': 0,
-                'status': 'open'
-            }
-        ]), 200
+        
+        top_tickets = Tickets.query.order_by(Tickets.upvotes.desc()).limit(limit).all()
+        
+        res = []
+        for ticket in top_tickets:
+            res.append({
+                'ticket_id': ticket.ticket_id,
+                'user_id': ticket.users.first().id,
+                'title': ticket.title,
+                'description': ticket.description,
+                'upvotes': ticket.upvotes,
+                'status': ticket.status
+            })
+        return jsonify(res), 200
 
+class ticketresolve_api:
+    def post(self, ticket_id):
+        response = request.get_json().response
+        
+        ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
+        ticket_responded = ticket.update({'response':response})
+        
+        db.session.commit()
 
+        return '', 200
+    
+    def put(self, ticket_id):
+        return self.post(ticket_id)

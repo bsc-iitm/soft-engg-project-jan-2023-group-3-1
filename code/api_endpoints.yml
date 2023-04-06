@@ -225,12 +225,12 @@ paths:
                       type: string
                       description: The status of the ticket
                       enum: [open, closed]   
-  /tickets/{id}/answer:
+  /tickets/{ticket_id}/answer:
     post:
       summary: Answer a support ticket
       description: Allows a support staff member to answer a support ticket by providing the ticket ID and answer details.
       parameters:
-        - name: id
+        - name: ticket_id
           in: path
           description: ID of the ticket to answer
           required: true
@@ -253,7 +253,7 @@ paths:
       summary: Update an answer for a given ticket
       description: Allows a support staff member to update an answer for a given ticket by providing the ticket ID and updated answer details.
       parameters:
-        - name: id
+        - name: ticket_id
           in: path
           description: ID of the ticket to update answer for
           required: true
