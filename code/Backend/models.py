@@ -30,14 +30,14 @@ class Role(db.Model,RoleMixin):
 
 class Tickets(db.Model):
     __tablename__ = "Tickets"
-    ticket_id = db.Column(db.Integer,nullable=False, unique=True, primary_key=True)
+    ticket_id = db.Column(db.Integer,nullable=False, unique=True, primary_key=True, auto_increment=True)
     date_created = db.Column(db.DateTime, nullable=False)
     last_modified = db.Column(db.DateTime, nullable=False)
     date_closed = db.Column(db.DateTime)
     upvotes = db.Column(db.Integer, nullable=False, default=0)
     title = db.Column(db.String,nullable=False)
     description = db.Column(db.String,nullable=False)
-    response = db.Column(db.String, nullable=False)
+    response = db.Column(db.String)
     status = db.Column(db.String, nullable=False, default="open")
     
     users = db.relationship('User',secondary='tickets_users', backref=db.backref('tickets',lazy='dynamic'))

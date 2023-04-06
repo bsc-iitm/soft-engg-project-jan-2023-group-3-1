@@ -36,10 +36,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
+                  ticket_id:
                     type: string
                     description: The ID of the created ticket
-                  student_id:
+                  user_id:
                     type: string
                     description: The ID of the student who created the ticket
                   title:
@@ -57,7 +57,7 @@ paths:
                     enum: [open, closed]
     get:
       summary: Get all tickets
-      description: Allows a student to access a list of existing tickets and upvote the desired ticket
+      description: Allows a student to access a list of existing tickets 
       responses:
         '200':
           description: OK
