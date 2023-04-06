@@ -112,7 +112,7 @@ class ticketid_api:
         }), 200
 
     def delete(ticket_id):
-        current_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id )
+        current_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id ).first()
         if not current_ticket:
             return 404
         current_ticket.delete()
@@ -123,7 +123,7 @@ class Votes_api:
     def put(self):
         upvote_data = request.get_json()
         
-        curr_ticket = Tickets.query.filter(Tickets.ticket_id == upvote_data.ticket_id)
+        curr_ticket = Tickets.query.filter(Tickets.ticket_id == upvote_data.ticket_id).first()
         upvoted = upvotes.query.filter(upvotes.id == current_user.id).filter(upvotes.ticket_id == upvote_data.ticket_id).first()
         
         if upvoted:
@@ -167,3 +167,44 @@ class ticketresolve_api:
     
     def put(self, ticket_id):
         return self.post(ticket_id)
+
+class faqs_api:
+    def get():
+        return faqs.query.all(), 200
+
+    def post():
+        faq_data = request.get_json()
+        
+        new_faq = faqs(question = faq_data.question, answer = faq_data.answer)
+        
+        db.session.add(new_faq)
+        db.session.commit()
+
+        return '', 201
+
+class faqid_api:
+    def get(f_id):
+        return faqs.query.filter(faqs.f_id == f_id).first(), 200
+
+    def put(f_id):
+        faq_data = request.get_json()
+        
+        curr_faq = faqs.query.filter(faqs.f_id == f_id).first()
+        
+        if not curr_faq:
+            return 404
+        updated_faq = curr_faq.update({'question':faq_data.question,
+                                       'answer':faq_data.answer})
+        db.session.commit()
+        return '',200
+    
+    def delete(f_id):
+        
+        curr_faq = faqs.query.filter(faqs.f_id == f_id).first()
+        if not curr_faq:
+            return 404
+        curr_faq.delete()
+        
+        db.session.commit()
+        
+        return '', 204

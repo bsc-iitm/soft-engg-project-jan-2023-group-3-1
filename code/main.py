@@ -31,6 +31,8 @@ api.add_resource(tickets_api,'/tickets')
 api.add_resource(ticketid_api,'/<int:ticket_id>')
 api.add_resource(Votes_api,'/tickets/upvote')
 api.add_resource(ticketresolve_api, '/tickets/<int:ticket_id>/answer')
+api.add_resource(faqs_api, '/faqs')
+api.add_resource(faqid_api, '/faqs/<int:f_id>')
 
 if __name__ == "__main__":
     app.run(debug = True)
