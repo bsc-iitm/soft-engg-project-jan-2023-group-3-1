@@ -1,5 +1,5 @@
 from flask import make_response, request,session, url_for, jsonify, FLask
-import os
+import os, datetime
 import pandas as pd
 from flask_restful import Resource, Api, marshal_with, fields
 from .database import db 
@@ -7,8 +7,11 @@ from .models import *
 from werkzeug.exceptions import HTTPException
 import json
 from flask_security import auth_token_required
+from flask_login import current_user
 from flask import current_app as app
 
+def currtime():
+    return datetime.datetime.now()
 
 class DefaultError(HTTPException):
     def __init__(self, status_code, desc):
@@ -19,109 +22,124 @@ class Success(HTTPException):
     def __init__(self, status_code, msg):
         self.response = make_response(msg, status_code)
 
-class BError(HTTPException):
-    def __init__(self, status_code, errorcode, errormsg):
-        message = {
-  "error_code": errorcode,
-  "error_message": errormsg
-}
-        self.response = make_response(json.dumps(message), status_code)
-
-# Creating a new ticket
-@app.route('/tickets', methods=['POST'])
-def create_ticket():
-    ticket_data = request.get_json()
-    # Your code for creating a new ticket goes here
-    # ...
-    # Return the ticket information
-    return jsonify({
-        'id': 'ticket_id',
-        'student_id': ticket_data['student_id'],
-        'title': ticket_data['title'],
-        'description': ticket_data['description'],
-        'upvotes': 0,
-        'status': 'open'
-    }), 201
-
-# Getting all tickets
-@app.route('/tickets', methods=['GET'])
-def get_tickets():
-    # Your code for getting all tickets goes here
-    # ...
-    # Return the list of tickets
-    return jsonify([
-        {
-            'id': 'ticket_id',
-            'student_id': 'student_id',
-            'title': 'ticket_title',
-            'description': 'ticket_description',
+class tickets_api:
+    def post():
+        try:
+            ticket_data = request.get_json()
+            new_ticket = Tickets(
+                        date_created = currtime(),
+                        last_modified = currtime(),
+                        title = ticket_data.title,
+                        description = ticket_data.description
+                        )
+            db.session.add(new_ticket)
+            
+            ticket_id = new_ticket.ticket_id
+            user_ticket = tickets_users(
+                        ticket_id = ticket_id,
+                        id = current_user.id
+            )
+            db.session.add(user_ticket)
+            db.session.commit()
+        except:
+            return 400
+        return jsonify({
+            'ticket_id': ticket_id,
+            'user_id': current_user.id,
+            'title': ticket_data['title'],
+            'description': ticket_data['description'],
             'upvotes': 0,
             'status': 'open'
-        }
-    ]), 200
+        }), 201
 
-# Updating ticket status
-@app.route('/<ticket_id>', methods=['PUT'])
-def update_ticket(ticket_id):
-    ticket_data = request.get_json()
-    # Your code for updating the ticket status goes here
-    # ...
-    # Return the updated ticket information
-    return jsonify({
-        'id': ticket_id,
-        'student_id': 'student_id',
-        'title': 'ticket_title',
-        'description': 'ticket_description',
-        'upvotes': 0,
-        'status': ticket_data['status']
-    }), 200
+    def get():
+        all_tickets = Tickets.query.all()
+        res = []
+        for ticket in all_tickets:
+            res.append({
+                'ticket_id': ticket.ticket_id,
+                'student_id': ticket.users.first().id,
+                'title': ticket.title,
+                'description': ticket.description,
+                'upvotes': ticket.upvotes,
+                'status': ticket.status
+            })
+        return jsonify(res), 200
 
-# Getting ticket details
-@app.route('/<ticket_id>', methods=['GET'])
-def get_ticket_details(ticket_id):
-    # Your code for getting the ticket details goes here
-    # ...
-    # Return the ticket details
-    return jsonify({
-        'id': ticket_id,
-        'student_id': 'student_id',
-        'title': 'ticket_title',
-        'description': 'ticket_description',
-        'upvotes': 0,
-        'status': 'open'
-    }), 200
+class ticketid_api:
+    def put(ticket_id):
+        ticket_data = request.get_json()
+        curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
+        
+        if not curr_ticket:
+            return 404
+        
+        if curr_ticket.status != 'open':
+            return DefaultError(status_code=405,desc='The ticket is not open and cannot be updated')
+        
+        if current_user.id != curr_ticket.users.first().id:
+            return DefaultError(status_code=403, desc='You are not authorised to update the ticket of other users')
+        
+        updated_ticket = curr_ticket.update({
+                        'title': ticket_data.title,
+                        'description': ticket_data.description,
+                        'last_modified': currtime()
+        })
+        db.session.commit()
+        
+        return jsonify({
+            'ticket_id': ticket_id,
+            'user_id': current_user.id,
+            'title': ticket_data.title,
+            'description': ticket_data.desc,
+            'upvotes': curr_ticket.upvotes,
+            'status': curr_ticket.status
+        }), 200
 
-# Deleting a ticket
-@app.route('/<ticket_id>', methods=['DELETE'])
-def delete_ticket(ticket_id):
-    # Your code for deleting the ticket goes here
-    # ...
-    return '', 204
+    def get(ticket_id):
+        curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
 
-# Upvoting a ticket
-@app.route('/tickets/upvote', methods=['PUT'])
-def upvote_ticket():
-    upvote_data = request.get_json()
-    # Your code for upvoting the ticket goes here
-    # ...
-    return '', 200
+        if not curr_ticket:
+            return 404
+        
+        return jsonify({
+            'ticket_id': ticket_id,
+            'user_id': curr_ticket.users.first().id,
+            'title': curr_ticket.title,
+            'description': curr_ticket.description,
+            'upvotes': curr_ticket.upvotes,
+            'status': curr_ticket.status
+        }), 200
 
-# Getting most upvoted tickets
-@app.route('/tickets/upvote', methods=['GET'])
-def get_most_upvoted_tickets():
-    limit = request.args.get('limit', default=10, type=int)
-    # Your code for getting the most upvoted tickets goes here
-    # ...
-    # Return the list of most upvoted tickets
-    return jsonify([
-        {
-            'id': 'ticket_id',
-            'student_id': 'student_id',
-            'title': 'ticket_title',
-            'description': 'ticket_description',
-            'upvotes': 0,
-            'status': 'open'
-        }
-    ]), 200
+    def delete(ticket_id):
+        current_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id )
+        if not current_ticket:
+            return 404
+        current_ticket.delete()
+        db.session.commit()
+        return '', 204
+
+class Votes_api:
+    def put():
+        upvote_data = request.get_json()
+        # Your code for upvoting the ticket goes here
+        # ...
+        return '', 200
+
+    def get():
+        limit = request.args.get('limit', default=10, type=int)
+        # Your code for getting the most upvoted tickets goes here
+        # ...
+        # Return the list of most upvoted tickets
+        return jsonify([
+            {
+                'id': 'ticket_id',
+                'student_id': 'student_id',
+                'title': 'ticket_title',
+                'description': 'ticket_description',
+                'upvotes': 0,
+                'status': 'open'
+            }
+        ]), 200
 
 

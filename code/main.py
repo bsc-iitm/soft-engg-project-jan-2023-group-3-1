@@ -21,8 +21,6 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 user_datastore =  SQLAlchemySessionUserDatastore(db.session,User,Role)
 
-from Backend.security_models import Registerform_roles
-
 security = Security(app, datastore=user_datastore)
 
 from Backend.controllers import *
