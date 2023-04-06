@@ -27,6 +27,8 @@ from Backend.controllers import *
 
 from Backend.api import *
 
+api.add_resource(tickets_api,'/tickets')
+api.add_resource(ticketid_api,'/<int:ticket_id>')
 
 if __name__ == "__main__":
     app.run(debug = True)
