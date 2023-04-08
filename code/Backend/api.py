@@ -1,11 +1,9 @@
-from flask import make_response, request,session, url_for, jsonify, FLask
-import os, datetime
-import pandas as pd
-from flask_restful import Resource, Api, marshal_with, fields
+from flask import make_response, request, jsonify
+import datetime
 from .database import db 
 from .models import *
+from flask_restful import Resource
 from werkzeug.exceptions import HTTPException
-import json
 from flask_security import auth_token_required
 from flask_login import current_user
 from flask import current_app as app
@@ -22,7 +20,8 @@ class Success(HTTPException):
     def __init__(self, status_code, msg):
         self.response = make_response(msg, status_code)
 
-class tickets_api:
+class tickets_api(Resource):
+    @auth_token_required
     def post(self):
         try:
             ticket_data = request.get_json()
@@ -42,16 +41,10 @@ class tickets_api:
             db.session.add(user_ticket)
             db.session.commit()
         except:
-            return 400
-        return jsonify({
-            'ticket_id': ticket_id,
-            'user_id': current_user.id,
-            'title': ticket_data['title'],
-            'description': ticket_data['description'],
-            'upvotes': 0,
-            'status': 'open'
-        }), 201
+            return make_response('Could no add the ticket',400)
+        return make_response(f'Added ticket with id-{ticket_id}', 201)
 
+    @auth_token_required
     def get(self):
         all_tickets = Tickets.query.all()
         res = []
@@ -64,21 +57,22 @@ class tickets_api:
                 'upvotes': ticket.upvotes,
                 'status': ticket.status
             })
-        return jsonify(res), 200
+        return make_response(jsonify(res),200)
 
-class ticketid_api:
+class ticketid_api(Resource):
+    @auth_token_required
     def put(self, ticket_id):
         ticket_data = request.get_json()
         curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
         
         if not curr_ticket:
-            return 404
+            return make_response('ticket with given id not found',404)
         
         if curr_ticket.status != 'open':
-            return DefaultError(status_code=405,desc='The ticket is not open and cannot be updated')
+            return make_response('The ticket is not open and cannot be updated',405)
         
         if current_user.id != curr_ticket.users.first().id:
-            return DefaultError(status_code=403, desc='You are not authorised to update the ticket of other users')
+            return make_response('You are not authorised to update the ticket of other users',403)
         
         updated_ticket = curr_ticket.update({
                         'title': ticket_data.title,
@@ -87,39 +81,35 @@ class ticketid_api:
         })
         db.session.commit()
         
-        return jsonify({
-            'ticket_id': ticket_id,
-            'user_id': current_user.id,
-            'title': ticket_data.title,
-            'description': ticket_data.desc,
-            'upvotes': curr_ticket.upvotes,
-            'status': curr_ticket.status
-        }), 200
+        return make_response('ticket created succesfully', 200)
 
+    @auth_token_required
     def get(self, ticket_id):
         curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
 
         if not curr_ticket:
-            return 404
+            return make_response('Not found',404)
         
-        return jsonify({
+        return make_response(jsonify({
             'ticket_id': ticket_id,
             'user_id': curr_ticket.users.first().id,
             'title': curr_ticket.title,
             'description': curr_ticket.description,
             'upvotes': curr_ticket.upvotes,
             'status': curr_ticket.status
-        }), 200
+        }), 200)
 
+    @auth_token_required
     def delete(ticket_id):
         current_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id ).first()
         if not current_ticket:
-            return 404
+            return make_response('ticket with given id not found',404)
         current_ticket.delete()
         db.session.commit()
-        return '', 204
+        return make_response('deleted successfully',204)
 
-class Votes_api:
+class Votes_api(Resource):
+    @auth_token_required
     def put(self):
         upvote_data = request.get_json()
         
@@ -135,8 +125,9 @@ class Votes_api:
         db.session.add(user_upvote_rec)
         db.session.commit()
         
-        return '', 200
+        return make_response('',200)
 
+    @auth_token_required
     def get(self):
         limit = request.args.get('limit', default=10, type=int)
         
@@ -152,9 +143,10 @@ class Votes_api:
                 'upvotes': ticket.upvotes,
                 'status': ticket.status
             })
-        return jsonify(res), 200
+        return make_response(jsonify(res), 200)
 
-class ticketresolve_api:
+class ticketresolve_api(Resource):
+    @auth_token_required
     def post(self, ticket_id):
         response = request.get_json().response
         
@@ -163,15 +155,18 @@ class ticketresolve_api:
         
         db.session.commit()
 
-        return '', 200
+        return make_response('',200)
     
+    @auth_token_required
     def put(self, ticket_id):
         return self.post(ticket_id)
 
-class faqs_api:
+class faqs_api(Resource):
+    @auth_token_required
     def get():
-        return faqs.query.all(), 200
+        return make_response(faqs.query.all(), 200)
 
+    @auth_token_required
     def post():
         faq_data = request.get_json()
         
@@ -180,24 +175,27 @@ class faqs_api:
         db.session.add(new_faq)
         db.session.commit()
 
-        return '', 201
+        return make_response('',201)
 
-class faqid_api:
+class faqid_api(Resource):
+    @auth_token_required
     def get(f_id):
-        return faqs.query.filter(faqs.f_id == f_id).first(), 200
+        return make_response(faqs.query.filter(faqs.f_id == f_id).first(), 200)
 
+    @auth_token_required
     def put(f_id):
         faq_data = request.get_json()
         
         curr_faq = faqs.query.filter(faqs.f_id == f_id).first()
         
         if not curr_faq:
-            return 404
+            return make_response('FAQ with given id not found',404)
         updated_faq = curr_faq.update({'question':faq_data.question,
                                        'answer':faq_data.answer})
         db.session.commit()
-        return '',200
+        return make_response('',200)
     
+    @auth_token_required
     def delete(f_id):
         
         curr_faq = faqs.query.filter(faqs.f_id == f_id).first()
@@ -207,4 +205,4 @@ class faqid_api:
         
         db.session.commit()
         
-        return '', 204
+        return make_response('deleted successfully',204)

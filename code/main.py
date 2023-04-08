@@ -35,4 +35,4 @@ api.add_resource(faqs_api, '/faqs')
 api.add_resource(faqid_api, '/faqs/<int:f_id>')
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = True,port=5000)

@@ -30,7 +30,7 @@ class Role(db.Model,RoleMixin):
 
 class Tickets(db.Model):
     __tablename__ = "Tickets"
-    ticket_id = db.Column(db.Integer,nullable=False, unique=True, primary_key=True, auto_increment=True)
+    ticket_id = db.Column(db.Integer,nullable=False, unique=True, primary_key=True, autoincrement=True)
     date_created = db.Column(db.DateTime, nullable=False)
     last_modified = db.Column(db.DateTime, nullable=False)
     date_closed = db.Column(db.DateTime)

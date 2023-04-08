@@ -1,15 +1,11 @@
 <template>
-  <div class="home">
-    <HelloWorld msg="hello"></HelloWorld>
-  </div>
+	<div class="home">
+	</div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue';
-export default {
-  name: 'FAQs',
-  components:{
-    HelloWorld
-  }
-}
+    import HelloWorld from '@/components/HelloWorld.vue';
+    export default {
+        name: 'FAQs'
+    }
 </script>

@@ -29,7 +29,7 @@ def dated_url_for(endpoint, **values):
 @app.route('/',methods=['GET','POST'])
 @login_required
 def homepage():
-    return redirect('http://192.168.1.5:8080/')
+    return redirect('http://localhost:8080/ ')
 
 @app.route('/roleselect', methods=['GET','POST'])
 @login_required
