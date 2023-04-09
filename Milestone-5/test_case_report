@@ -1,4 +1,4 @@
-test_ticket_api:
+test_ticket:
 
 Test Case 1: Creating a ticket and checking if it is returned with all the correct details
 Inputs: {"title": "Test Ticket", "description": "This is a test ticket"}
@@ -11,7 +11,7 @@ Expected Output: status_code 200 and a JSON response with the ticket_id, title a
 Actual Output: status_code 200 and a JSON response with the ticket_id, title and description matching the updated inputs
 Result: Success
 
-test_vote_api:
+test_vote:
 
 Test Case 1: Adding an upvote to a ticket and checking if the upvote count is updated
 Inputs: {"ticket_id": 1}
@@ -24,7 +24,7 @@ Expected Output: status_code 200 and a JSON response with all the tickets with t
 Actual Output: status_code 200 and a JSON response with all the tickets with their ticket_id, title, description, and upvotes count
 Result: Success
 
-test_faq_api:
+test_faq:
 
 Test Case 1: Creating a new FAQ and checking if it is returned with all the correct details
 Inputs: {"question": "Test Question", "answer": "This is a test answer"}
