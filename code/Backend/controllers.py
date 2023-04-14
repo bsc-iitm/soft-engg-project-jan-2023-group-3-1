@@ -4,11 +4,12 @@ from distutils.log import Log
 from sqlalchemy import extract,func
 import numpy as np
 import matplotlib.pyplot as plt
-from flask import Flask,request,render_template,redirect, url_for,jsonify,session
+from flask import Flask,request,render_template,redirect, url_for,jsonify, make_response
 from flask import current_app as app
 from .models import *
-import flask_login
-from flask_login import login_required
+from .api import currtime
+from flask_security import auth_token_required
+from flask_login import login_required,current_user
 from flask_caching import Cache
 cache = Cache(app)
 
@@ -25,25 +26,22 @@ def dated_url_for(endpoint, **values):
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
 
-
 @app.route('/',methods=['GET','POST'])
-@login_required
 def homepage():
-    return redirect('http://localhost:8080/ ')
+    return redirect('http://localhost:8080/')
 
 @app.route('/roleselect', methods=['GET','POST'])
 @login_required
 def role_select():
-    
     if request.method == 'GET':
-        if flask_login.current_user.roles:
+        if current_user.roles:
             return "Role already assigned"
         roles = Role.query.all()
         return render_template("role_select.html",roles=roles)
     
     if request.method == 'POST':
         role = request.form.get('role')
-        curr_id = flask_login.current_user.id
+        curr_id = current_user.id
         adding_relation = user_role(id = curr_id,role_id=role)
         db.session.add(adding_relation)
         db.session.commit()

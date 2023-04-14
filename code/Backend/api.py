@@ -4,7 +4,7 @@ from .database import db
 from .models import *
 from flask_restful import Resource
 from werkzeug.exceptions import HTTPException
-from flask_security import auth_token_required
+from flask_security import auth_token_required,login_user
 from flask_login import current_user
 from flask import current_app as app
 
@@ -19,6 +19,13 @@ class DefaultError(HTTPException):
 class Success(HTTPException):
     def __init__(self, status_code, msg):
         self.response = make_response(msg, status_code)
+
+class user_api(Resource):
+    @auth_token_required
+    def post(self):
+        creds = request.get_json()
+        curr_user = User.query.filter(User.email == creds['email']).first()
+        return make_response(jsonify(curr_user.as_dict()), 200)
 
 class tickets_api(Resource):
     @auth_token_required
@@ -206,3 +213,4 @@ class faqid_api(Resource):
         db.session.commit()
         
         return make_response('deleted successfully',204)
+    

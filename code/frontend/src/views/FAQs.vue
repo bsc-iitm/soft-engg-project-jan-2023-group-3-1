@@ -1,10 +1,13 @@
 <template>
-	<div class="home">
+    <nav>
+		<router-link to="/tickets">Tickets</router-link> |
+		<router-link to="/faqs">FAQs</router-link>
+	</nav>
+	<div>
 	</div>
 </template>
 
 <script>
-    import HelloWorld from '@/components/HelloWorld.vue';
     export default {
         name: 'FAQs'
     }
