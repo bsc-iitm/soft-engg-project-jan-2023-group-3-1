@@ -12,6 +12,7 @@ class Config():
     SECURITY_TOKEN_AUTHENTICATION_HEADER = "Authentication-Token"
     CELERY_BROKER_URL = "redis://localhost:6379/1"
     CELERY_RESULT_BACKEND = "redis://localhost:6379/2"
+    CORS_ENABLED = True
 
 class LocalDevelopmentConfig(Config):
     SQLITE_DB_DIR = os.path.join(basedir, "../db_directory")
@@ -28,3 +29,4 @@ class LocalDevelopmentConfig(Config):
     CELERY_RESULT_BACKEND = "redis://localhost:6379/2"
     CACHE_TYPE = "SimpleCache"
     CACHE_DEFAULT_TIMEOUT = 300
+    CORS_ENABLED = True
