@@ -25,6 +25,7 @@ class user_api(Resource):
     def post(self):
         creds = request.get_json()
         curr_user = User.query.filter(User.email == creds['email']).first()
+        login_user(curr_user)
         return make_response(jsonify(curr_user.as_dict()), 200)
 
 class tickets_api(Resource):
@@ -124,7 +125,10 @@ class Votes_api(Resource):
         upvoted = upvotes.query.filter(upvotes.id == current_user.id).filter(upvotes.ticket_id == upvote_data.ticket_id).first()
         
         if upvoted:
-            return DefaultError(status_code=409,desc="The post has already upvoted by the current user")
+            curr_ticket.upvotes = Tickets.upvotes -1
+            upvoted.delete()
+            db.session.commit()
+            return make_response("post upvote removed successfully",200)
         
         curr_ticket.upvotes = Tickets.upvotes +1
         user_upvote_rec = upvotes(id=current_user.id, ticket_id = curr_ticket.ticket_id)
@@ -132,7 +136,7 @@ class Votes_api(Resource):
         db.session.add(user_upvote_rec)
         db.session.commit()
         
-        return make_response('',200)
+        return make_response('post upvoted successfully',200)
 
     @auth_token_required
     def get(self):

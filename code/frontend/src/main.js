@@ -6,6 +6,7 @@ import "../node_modules/bootstrap/dist/js/bootstrap.bundle"
 import store from './store'
 
 router.beforeEach(async (to,from) => {
+	console.log(to,from)
 	if (!store.state.logged_in && to.name !== 'Login') {
 		return { name: 'Login' }
 	}
