@@ -33,6 +33,7 @@ class tickets_api(Resource):
     def post(self):
         try:
             ticket_data = request.get_json()
+            print(ticket_data)
             new_ticket = Tickets(
                         date_created = currtime(),
                         last_modified = currtime(),

@@ -40,14 +40,14 @@
                 <div class="mb-3 row justify-content-center">
                     <label class="col-5 form-label text-lg-end">Title</label>
                     <div class="col-5">
-                        <input type="text" name="Title" class="form-control" required/>
+                        <input type="text" name="Title" class="form-control" required v-model="this.title"/>
                     </div>
                     <div class="col-2"></div>
                 </div>
                 <div class="mb-3 row justify-content-center">
                     <label class="col-5 form-label text-lg-end">Description</label>
                     <div class="col-5">
-                        <input type="text" name="desc" class="form-control"/>
+                        <input type="text" name="desc" class="form-control" v-model="this.desc"/>
                     </div>
                     <div class="col-2"></div>
                 </div>
@@ -76,7 +76,9 @@
 				port:'http://localhost:5000/',
 				current_user: {},
 				auth_token: '',
-				headers: {}
+				headers: {},
+				title: '',
+				desc: ''
 			}
 		},
 		components: {
@@ -95,10 +97,11 @@
 			},
 			addticket(){
 				const path = 'tickets'
-				console.log(this.auth_token)
-				axios.post(this.port+path,{headers:this.headers})
+				console.log(this.headers)
+				axios.post(this.port+path,{title: this.title, description: this.desc},{headers:this.headers})
 				.then((res)=>{
-					this.tickets = res.data
+					console.log(res)
+					this.tickets = this.gettickets()
 				})
 				.catch((rej)=>{
 					console.log(rej)
