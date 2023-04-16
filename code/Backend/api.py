@@ -33,12 +33,11 @@ class tickets_api(Resource):
     def post(self):
         try:
             ticket_data = request.get_json()
-            print(ticket_data)
             new_ticket = Tickets(
                         date_created = currtime(),
                         last_modified = currtime(),
-                        title = ticket_data.title,
-                        description = ticket_data.description
+                        title = ticket_data['title'],
+                        description = ticket_data['description']
                         )
             db.session.add(new_ticket)
             
@@ -50,7 +49,7 @@ class tickets_api(Resource):
             db.session.add(user_ticket)
             db.session.commit()
         except:
-            return make_response('Could no add the ticket',400)
+           return make_response('Could no add the ticket',400)
         return make_response(f'Added ticket with id-{ticket_id}', 201)
 
     @auth_token_required
