@@ -12,8 +12,6 @@
 
 	<add_ticket @added_ticket="gettickets()"></add_ticket>
 
-	
-
 </template>
 
 <script>

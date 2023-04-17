@@ -51,6 +51,11 @@ class tickets_users(db.Model):
     ticket_id = db.Column(db.Integer, db.ForeignKey('Tickets.ticket_id'),primary_key=True, nullable=False)
     id = db.Column(db.Integer,db.ForeignKey('User.id'),nullable=False,primary_key=True)
 
+class resolvedby(db.Model):
+    __tablename__ = 'resolvedby'
+    ticket_id = db.Column(db.Integer, db.ForeignKey('Tickets.ticket_id'),primary_key=True, nullable=False)
+    id = db.Column(db.Integer,db.ForeignKey('User.id'),nullable=False,primary_key=True)
+
 class upvotes(db.Model):
     __tablename__ = 'upvotes'
     ticket_id = db.Column(db.Integer, db.ForeignKey('Tickets.ticket_id'),primary_key=True, nullable=False)
