@@ -10,7 +10,7 @@
 		<ticket v-for="ticket in tickets" :title="ticket.title" :desc="ticket.description" :key="ticket.ticket_id"></ticket>
 	</div>
 
-	<add_ticket></add_ticket>
+	<add_ticket @added_ticket="gettickets()"></add_ticket>
 
 	
 
@@ -33,9 +33,9 @@
 			}
 		},
 		components: {
-    ticket,
-    add_ticket
-},
+			ticket,
+			add_ticket
+		},
 		methods:{
 			gettickets(){
 				const path = 'tickets'
@@ -57,7 +57,6 @@
 				'Authentication-Token': this.auth_token
 				}
 			this.tickets = this.gettickets()
-			this.$el.addEventListener('added_ticket',this.gettickets())
 		}
 	}
 </script>

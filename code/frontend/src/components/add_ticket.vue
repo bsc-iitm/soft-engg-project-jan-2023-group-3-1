@@ -45,7 +45,7 @@
 
 <script>
 	import store from '@/store';
-	import axios from 'axios'
+	import axios from 'axios';
     export default{
 		name:"AddTicket",
 		data(){
@@ -65,7 +65,6 @@
 					'title': this.title,
 					'description': this.description
 				}
-				console.log(this.auth_token)
 				axios.post(this.port+path,data,{headers:this.headers})
 				.then((res)=>{
 					this.$emit('added_ticket')
