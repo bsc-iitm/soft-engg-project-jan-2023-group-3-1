@@ -36,11 +36,11 @@ class tickets_api(Resource):
             new_ticket = Tickets(
                         date_created = currtime(),
                         last_modified = currtime(),
-                        title = ticket_data.title,
-                        description = ticket_data.description
+                        title = ticket_data['title'],
+                        description = ticket_data['description']
                         )
             db.session.add(new_ticket)
-            
+            db.session.commit()
             ticket_id = new_ticket.ticket_id
             user_ticket = tickets_users(
                         ticket_id = ticket_id,
@@ -59,7 +59,7 @@ class tickets_api(Resource):
         for ticket in all_tickets:
             res.append({
                 'ticket_id': ticket.ticket_id,
-                'user_id': ticket.users.first().id,
+                'user_id': ticket.users[0].id,
                 'title': ticket.title,
                 'description': ticket.description,
                 'upvotes': ticket.upvotes,

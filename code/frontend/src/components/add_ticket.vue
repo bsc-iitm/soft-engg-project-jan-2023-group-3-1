@@ -18,23 +18,16 @@
 					<div class="modal-body">
 						<form class="container px-5 text-center">
 									<div class="mb-3 row justify-content-center">
-										<label class="col-5 form-label text-lg-end">Time of Creation</label>
-										<div class="col-5">
-											<input type='datetime-local' name='date_created' class="form-control" required />
-										</div>
-										<div class="col-2"></div>
-									</div>
-									<div class="mb-3 row justify-content-center">
 										<label class="col-5 form-label text-lg-end">Title</label>
 										<div class="col-5">
-											<input type="text" name="Title" class="form-control" required/>
+											<input type="text" name="Title" class="form-control" v-model="title" required/>
 										</div>
 										<div class="col-2"></div>
 									</div>
 									<div class="mb-3 row justify-content-center">
 										<label class="col-5 form-label text-lg-end">Description</label>
 										<div class="col-5">
-											<input type="text" name="desc" class="form-control"/>
+											<input type="text" name="desc" class="form-control" v-model="description"/>
 										</div>
 										<div class="col-2"></div>
 									</div>
@@ -59,6 +52,7 @@
 			return {
 				current_user:{},
 				auth_token: '',
+				port:'http://localhost:5000/',
 				headers: {},
 				title: '',
 				description: ''
