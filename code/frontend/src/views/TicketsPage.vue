@@ -37,12 +37,19 @@
 				headers: {},
 				title: '',
 				desc: '',
-				search: ''
+				search: '',
+				filters: ['All','Open','Closed'],
+				activeFilter: 'All'
 			}
 		},
 		computed: {
 			filtered() {
-				return this.tickets.filter((item) => item.title.includes(this.search));
+				if (activeFilter === 'All') {
+					return this.tickets.filter((item) => item.title.includes(this.search));
+				}
+				
+				return this.tickets.filter((item) => item.status === activeFilter.value).filter((item) => item.title.includes(this.search));
+				
 			}
 		},
 		components: {
