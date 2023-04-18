@@ -12,6 +12,11 @@
 			<div class="col-2">
 				Filter By: <input v-model="search">	
 			</div>
+			<div class="tags-wrapper">
+				<div v-for="(filter, index) in filters" :key="index">
+					<button @click="this.activeFilter=filter" :class="{ active: filter === this.activeFilter }">{{ filter }}</button>
+				</div>
+			</div>
 			<div class="col-8 mb-3">
 				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered" :ticket="ticket" :key="ticket.ticket_id"></ticket>
 			</div>
@@ -44,11 +49,11 @@
 		},
 		computed: {
 			filtered() {
-				if (activeFilter === 'All') {
+				if (this.activeFilter === 'All') {
 					return this.tickets.filter((item) => item.title.includes(this.search));
 				}
 				
-				return this.tickets.filter((item) => item.status === activeFilter.value).filter((item) => item.title.includes(this.search));
+				return this.tickets.filter((item) => item.status === this.activeFilter.toLowerCase()).filter((item) => item.title.includes(this.search));
 				
 			}
 		},
