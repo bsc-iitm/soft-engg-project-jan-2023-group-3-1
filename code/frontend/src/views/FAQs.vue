@@ -1,20 +1,12 @@
 <template>
 	<div >
 		<nav>
-			<h1>This is the tickets page</h1>
+			<h1>This is the FAQ's page</h1>
 			<router-link to="/tickets">Tickets</router-link> |
 			<router-link to="/faqs">FAQs</router-link>
 		</nav>
 		<div class="row">
-			<add_faq @added_faq="getfaqs()"></add_faq>
-		</div>
-		<div class="row">
-			<div class="col-2">
-				Filter By: <input v-model="search">	
-			</div>
-			<div class="col-8 mb-3">
-				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered" :ticket="ticket" :key="ticket.ticket_id"></ticket>
-			</div>
+			<add_faq @added_faq="getfaq()"></add_faq>
 		</div>
 
 	</div>
@@ -24,10 +16,10 @@
 <script>
 	import axios from 'axios'
 	import store from '@/store'
-	import ticket from "../components/ticket.vue";
 	import add_faq from '@/components/add_faq.vue';
+
 	export default {
-		name: "FAQs",
+		name: "FAQsPage",
 		data(){
 			return {
 				faqs:[],
@@ -35,18 +27,15 @@
 				current_user: {},
 				auth_token: '',
 				headers: {},
-				question: '',
-				answer: '',
-				search: ''
+				title: '',
+				desc: '',
+				search: '',
+				filters: ['All','Open','Closed'],
+				activeFilter: 'All'
 			}
 		},
-		computed: {
-			filtered() {
-				return this.tickets.filter((item) => item.title.includes(this.search));
-			}
-		},
+
 		components: {
-			ticket,
 			add_faq
 		},
 		methods:{
@@ -59,6 +48,30 @@
 				.catch((rej)=>{
 					console.log(rej)
 				})
+			},
+			addfaq(){
+				const path = 'faqs'
+				console.log(this.headers)
+				axios.post(this.port+path,{title: this.title, description: this.desc},{headers:this.headers})
+				.then((res)=>{
+					console.log(res)
+					this.faqs = this.getfaq()
+				})
+			},
+			update_faq(faq_id){
+				const path = `faq/${faq_id}`
+				axios.get(this.port+path,{headers:this.headers})
+				.then((res)=>{
+					console.log(res)
+					for(let i=0;i<this.faqs.length;i++){
+						if(this.faq[i].faq_id == faq_id){
+							this.faqs[i] = res.data
+						}
+					}
+				}) 
+				.catch((rej)=>{
+					console.log(rej)
+				})
 			}
 		},
 		async mounted() {
@@ -68,7 +81,8 @@
 				'Content-Type': 'application/json',
 				'Authentication-Token': this.auth_token
 				}
-			this.faqs = this.getfaqs()
+			this.tickets = this.getfaqs()
 		}
 	}
 </script>
+	
