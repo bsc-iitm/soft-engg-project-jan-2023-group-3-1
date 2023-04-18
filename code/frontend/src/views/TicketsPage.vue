@@ -10,6 +10,7 @@
 		<ticket v-for="ticket in tickets" :title="ticket.title" :desc="ticket.description" :key="ticket.ticket_id"></ticket>
 	</div>
 
+<<<<<<< HEAD
 
 
 	<!-- Button trigger modal -->
@@ -61,6 +62,9 @@
   </div>
 </div>
 </div>
+=======
+	<add_ticket @added_ticket="gettickets()"></add_ticket>
+>>>>>>> e7a3f6b24660c8906397657a778a9c0cf3a68d61
 
 </template>
 
@@ -68,6 +72,7 @@
 	import axios from 'axios'
 	import store from '@/store'
 	import ticket from "../components/ticket.vue";
+	import add_ticket from '@/components/add_ticket.vue';
 	export default {
 		name: "TicketsPage",
 		data(){
@@ -82,7 +87,8 @@
 			}
 		},
 		components: {
-			ticket
+			ticket,
+			add_ticket
 		},
 		methods:{
 			gettickets(){
@@ -95,6 +101,7 @@
 					console.log(rej)
 				})
 			},
+<<<<<<< HEAD
 			addticket(){
 				const path = 'tickets'
 				console.log(this.headers)
@@ -107,6 +114,9 @@
 					console.log(rej)
 				})
 			}
+=======
+			
+>>>>>>> e7a3f6b24660c8906397657a778a9c0cf3a68d61
 		},
 		async mounted() {
 			this.current_user = store.state.user
