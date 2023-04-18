@@ -6,7 +6,7 @@
 			<router-link to="/faqs">FAQs</router-link>
 		</nav>
 		<div class="row">
-			<add_faq @added_ticket="gettickets()"></add_ticket>
+			<add_faq @added_faq="getfaqs()"></add_faq>
 		</div>
 		<div class="row">
 			<div class="col-2">
@@ -25,7 +25,7 @@
 	import axios from 'axios'
 	import store from '@/store'
 	import ticket from "../components/ticket.vue";
-	import add_ticket from '@/components/add_ticket.vue';
+	import add_faq from '@/components/add_faq.vue';
 	export default {
 		name: "FAQs",
 		data(){
@@ -35,8 +35,8 @@
 				current_user: {},
 				auth_token: '',
 				headers: {},
-				title: '',
-				desc: '',
+				question: '',
+				answer: '',
 				search: ''
 			}
 		},
@@ -47,39 +47,15 @@
 		},
 		components: {
 			ticket,
-			add_ticket
+			add_faq
 		},
 		methods:{
-			gettickets(){
-				const path = 'tickets'
+			getfaqs(){
+				const path = 'faqs'
 				axios.get(this.port+path,{headers:this.headers})
 				.then((res)=>{
-					this.tickets = res.data
+					this.faqs = res.data
 				})
-				.catch((rej)=>{
-					console.log(rej)
-				})
-			},
-			addticket(){
-				const path = 'tickets'
-				console.log(this.headers)
-				axios.post(this.port+path,{title: this.title, description: this.desc},{headers:this.headers})
-				.then((res)=>{
-					console.log(res)
-					this.tickets = this.gettickets()
-				})
-			},
-			update_ticket(ticket_id){
-				const path = `ticket/${ticket_id}`
-				axios.get(this.port+path,{headers:this.headers})
-				.then((res)=>{
-					console.log(res)
-					for(let i=0;i<this.tickets.length;i++){
-						if(this.tickets[i].ticket_id == ticket_id){
-							this.tickets[i] = res.data
-						}
-					}
-				}) 
 				.catch((rej)=>{
 					console.log(rej)
 				})
@@ -92,7 +68,7 @@
 				'Content-Type': 'application/json',
 				'Authentication-Token': this.auth_token
 				}
-			this.tickets = this.gettickets()
+			this.faqs = this.getfaqs()
 		}
 	}
 </script>
