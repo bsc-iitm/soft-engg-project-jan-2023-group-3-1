@@ -14,24 +14,25 @@
     <div class="row border d-flex align-items-center" v-if="isOpen" name="desc_dropdown">
         <p v-if="!isEditing" class="col w-75 text-start m-0">{{ticket.description}}</p>
         <input v-else class="col-1 w-75 text-start m-0 f" v-model="ticketcopy.description">
+        <input v-if="isStaff" class="col-1 w-75 text-start m-0 f" v-model="ticketcopy.response">
         <div class="col w-25 text-end">
-            <div v-if="isEditing">
-                <button @click="save_changes()" type="button" class="btn btn-outline-success">
+            <div>
+                <button v-if="isEditing" @click="save_changes()" type="button" class="btn btn-outline-success">
                     <i class="fa-solid fa-check"></i>
                 </button>
-                <button @click="ticket_edit()" type="button" class="btn btn-outline-danger">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div v-else>
-                <button @click="ticket_edit()" type="button" class="btn">
+                <button v-if="!isEditing" @click="ticket_edit()" type="button" class="btn">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </button>
-                <button @click="ticket_delete()" type="button" class="col btn btn-outline-danger">
+                <button v-if="isEditing" @click="ticket_edit()" type="button" class="btn btn-outline-danger">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button v-if="isStaff" @click="answer_ticket()" type="button" class="btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+                <button v-if="isStaff" @click="ticket_delete()" type="button" class="col btn btn-outline-danger">
                     <i class="fa-regular fa-trash-can"></i>
                 </button>
             </div>
-            
         </div>
     </div>
     <div class="row d-flex align-items-center border">
@@ -62,6 +63,7 @@
 				headers: {},
                 isOpen: false,
                 isEditing: false,
+                isStaff: true
 			}
 		},
         methods:{
@@ -86,6 +88,37 @@
                 .catch((rej)=>{
                     console.log(rej)
                 })
+            },
+            answer_ticket(){
+                const ticket_id = this.ticket.ticket_id
+                const url = `tickets/${ticket_id}/answer`
+                const data = {'title':this.ticketcopy.title,
+                            'description': this.ticketcopy.description,
+                            'response': this.ticketcopy.response}
+                axios.post(this.port+url,data,{headers:this.headers})
+                .then((res)=>{
+                    console.log(res)
+                    this.isEditing = false
+                    this.$emit('ticket_edited')
+                })
+                .catch((rej)=>{
+                    console.log(rej)
+                })
+
+            },
+            upvote(){
+                const url = "tickets/upvote"
+                const data = {'title':this.ticketcopy.title,
+                            'ticket_id': this.ticketcopy.ticket_id}
+                axios.put(this.port+url,data,{headers:this.headers})
+                .then((res)=>{
+                    console.log(this.ticketcopy,res)
+                    this.$emit('ticket_edited')
+                })
+                .catch((rej)=>{
+                    console.log(rej)
+                })
+
             }
         },
         created(){
@@ -93,6 +126,7 @@
         },
         async mounted() {
             this.current_user = store.state.user
+            //this.isStaff = this.current_user.roles.includes('Support Staff')
             this.auth_token = store.state.auth_token
             this.headers = {
                 'Content-Type': 'application/json',

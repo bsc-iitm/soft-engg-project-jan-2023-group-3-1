@@ -11,6 +11,7 @@
 		<div class="row">
 			<div class="col-2">
 				Filter By: <input v-model="search">	
+				Limit to: <input v-model="limit">	
 			</div>
 			<div class="tags-wrapper">
 				<div v-for="(filter, index) in filters" :key="index">
@@ -18,7 +19,7 @@
 				</div>
 			</div>
 			<div class="col-8 mb-3">
-				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered" :ticket="ticket" :key="ticket.ticket_id"></ticket>
+				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered.slice(0,limit)" :ticket="ticket" :key="ticket.ticket_id"></ticket>
 			</div>
 		</div>
 
@@ -43,14 +44,18 @@
 				title: '',
 				desc: '',
 				search: '',
-				filters: ['All','Open','Closed'],
-				activeFilter: 'All'
+				filters: ['All','Open','Closed','My Tickets'],
+				activeFilter: 'All',
+				limit: 100
 			}
 		},
 		computed: {
 			filtered() {
 				if (this.activeFilter === 'All') {
 					return this.tickets.filter((item) => item.title.includes(this.search));
+				}
+				if (this.activeFilter === 'My Tickets') {
+					return this.tickets.filter((item) => item.user.id === this.current_user.id);
 				}
 				
 				return this.tickets.filter((item) => item.status === this.activeFilter.toLowerCase()).filter((item) => item.title.includes(this.search));
@@ -85,7 +90,6 @@
 				const path = `ticket/${ticket_id}`
 				axios.get(this.port+path,{headers:this.headers})
 				.then((res)=>{
-					console.log(res)
 					for(let i=0;i<this.tickets.length;i++){
 						if(this.tickets[i].ticket_id == ticket_id){
 							this.tickets[i] = res.data
@@ -99,6 +103,7 @@
 		},
 		async mounted() {
 			this.current_user = store.state.user
+			console.log(store.state.user)
 			this.auth_token = store.state.auth_token
 			this.headers = {
 				'Content-Type': 'application/json',

@@ -142,7 +142,7 @@ class Votes_api(Resource):
         
         if upvoted:
             curr_ticket.upvotes = Tickets.upvotes -1
-            upvoted.delete()
+            db.session.delete(upvoted)
             db.session.commit()
             return make_response("post upvote removed successfully",200)
         
@@ -173,7 +173,8 @@ class ticketresolve_api(Resource):
         response = request.get_json()['response']
         
         ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
-        ticket_responded = ticket.update({'response':response, 'status':'closed'})
+        ticket.response = response
+        ticket.status = 'closed'
         resolved_rec = resolvedby(ticket_id = ticket.ticket_id, id= current_user.id)
         
         db.session.add(resolved_rec)
