@@ -10,73 +10,14 @@
 		</div>
 		<div class="row">
 			<div class="col-2">
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-	<!-- Button trigger modal -->
-	<div>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Add ticket
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Describe your query</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-		<form class="container px-5 text-center">
-                <div class="mb-3 row justify-content-center">
-                    <label class="col-5 form-label text-lg-end">Time of Creation</label>
-                    <div class="col-5">
-                        <input type='datetime-local' name='date_created' class="form-control" required />
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-                <div class="mb-3 row justify-content-center">
-                    <label class="col-5 form-label text-lg-end">Title</label>
-                    <div class="col-5">
-                        <input type="text" name="Title" class="form-control" required v-model="this.title"/>
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-                <div class="mb-3 row justify-content-center">
-                    <label class="col-5 form-label text-lg-end">Description</label>
-                    <div class="col-5">
-                        <input type="text" name="desc" class="form-control" v-model="this.desc"/>
-                    </div>
-                    <div class="col-2"></div>
-                </div>
-            </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" v-on:click="addticket">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-=======
-	<add_ticket @added_ticket="gettickets()"></add_ticket>
->>>>>>> e7a3f6b24660c8906397657a778a9c0cf3a68d61
-=======
+				Filter By: <input v-model="search">	
 			</div>
 			<div class="col-8 mb-3">
-				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in tickets" :ticket="ticket" :key="ticket.ticket_id"></ticket>
+				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered" :ticket="ticket" :key="ticket.ticket_id"></ticket>
 			</div>
 		</div>
 
 	</div>
-	
->>>>>>> cfb2b8a909a24fd70f7933d21a4d5ba53b093e4c
 
 </template>
 
@@ -95,7 +36,13 @@
 				auth_token: '',
 				headers: {},
 				title: '',
-				desc: ''
+				desc: '',
+				search: ''
+			}
+		},
+		computed: {
+			filtered() {
+				return this.tickets.filter((item) => item.title.includes(this.search));
 			}
 		},
 		components: {
@@ -113,8 +60,6 @@
 					console.log(rej)
 				})
 			},
-<<<<<<< HEAD
-<<<<<<< HEAD
 			addticket(){
 				const path = 'tickets'
 				console.log(this.headers)
@@ -123,7 +68,7 @@
 					console.log(res)
 					this.tickets = this.gettickets()
 				})
-=======
+			},
 			update_ticket(ticket_id){
 				const path = `ticket/${ticket_id}`
 				axios.get(this.port+path,{headers:this.headers})
@@ -135,17 +80,10 @@
 						}
 					}
 				}) 
->>>>>>> cfb2b8a909a24fd70f7933d21a4d5ba53b093e4c
 				.catch((rej)=>{
 					console.log(rej)
 				})
 			}
-<<<<<<< HEAD
-=======
-			
->>>>>>> e7a3f6b24660c8906397657a778a9c0cf3a68d61
-=======
->>>>>>> cfb2b8a909a24fd70f7933d21a4d5ba53b093e4c
 		},
 		async mounted() {
 			this.current_user = store.state.user
