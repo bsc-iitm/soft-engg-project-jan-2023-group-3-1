@@ -1,15 +1,17 @@
 <template>
-	<nav>
-		<router-link to="/tickets">Tickets</router-link> |
-		<router-link to="/faqs">FAQs</router-link>
-	</nav>
-	<div>
-		<h1>This is the tickets page</h1>
-	</div>
-	<div>
-		<ticket v-for="ticket in tickets" :title="ticket.title" :desc="ticket.description" :key="ticket.ticket_id"></ticket>
-	</div>
+	<div >
+		<nav>
+			<h1>This is the tickets page</h1>
+			<router-link to="/tickets">Tickets</router-link> |
+			<router-link to="/faqs">FAQs</router-link>
+		</nav>
+		<div class="row">
+			<add_ticket @added_ticket="gettickets()"></add_ticket>
+		</div>
+		<div class="row">
+			<div class="col-2">
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
@@ -65,6 +67,16 @@
 =======
 	<add_ticket @added_ticket="gettickets()"></add_ticket>
 >>>>>>> e7a3f6b24660c8906397657a778a9c0cf3a68d61
+=======
+			</div>
+			<div class="col-8 mb-3">
+				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in tickets" :ticket="ticket" :key="ticket.ticket_id"></ticket>
+			</div>
+		</div>
+
+	</div>
+	
+>>>>>>> cfb2b8a909a24fd70f7933d21a4d5ba53b093e4c
 
 </template>
 
@@ -102,6 +114,7 @@
 				})
 			},
 <<<<<<< HEAD
+<<<<<<< HEAD
 			addticket(){
 				const path = 'tickets'
 				console.log(this.headers)
@@ -110,13 +123,29 @@
 					console.log(res)
 					this.tickets = this.gettickets()
 				})
+=======
+			update_ticket(ticket_id){
+				const path = `ticket/${ticket_id}`
+				axios.get(this.port+path,{headers:this.headers})
+				.then((res)=>{
+					console.log(res)
+					for(let i=0;i<this.tickets.length;i++){
+						if(this.tickets[i].ticket_id == ticket_id){
+							this.tickets[i] = res.data
+						}
+					}
+				}) 
+>>>>>>> cfb2b8a909a24fd70f7933d21a4d5ba53b093e4c
 				.catch((rej)=>{
 					console.log(rej)
 				})
 			}
+<<<<<<< HEAD
 =======
 			
 >>>>>>> e7a3f6b24660c8906397657a778a9c0cf3a68d61
+=======
+>>>>>>> cfb2b8a909a24fd70f7933d21a4d5ba53b093e4c
 		},
 		async mounted() {
 			this.current_user = store.state.user

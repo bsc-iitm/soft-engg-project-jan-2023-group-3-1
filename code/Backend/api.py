@@ -26,7 +26,9 @@ class user_api(Resource):
         creds = request.get_json()
         curr_user = User.query.filter(User.email == creds['email']).first()
         login_user(curr_user)
-        return make_response(jsonify(curr_user.as_dict()), 200)
+        res = curr_user.as_dict()
+        res['role'] = curr_user.roles[0].name
+        return make_response(jsonify(res), 200)
 
 class tickets_api(Resource):
     @auth_token_required
@@ -70,14 +72,9 @@ class tickets_api(Resource):
         
         res = []
         for ticket in tickets:
-            res.append({
-                'ticket_id': ticket.ticket_id,
-                'user_id': ticket.users[0].id,
-                'title': ticket.title,
-                'description': ticket.description,
-                'upvotes': ticket.upvotes,
-                'status': ticket.status
-            })
+            temp = ticket.as_dict()
+            temp['user'] = ticket.users[0].as_dict()
+            res.append(temp)
         return make_response(jsonify(res),200)
     
     @auth_token_required
@@ -85,29 +82,24 @@ class tickets_api(Resource):
         all_tickets = Tickets.query.all()
         res = []
         for ticket in all_tickets:
-            res.append({
-                'ticket_id': ticket.ticket_id,
-                'user_id': ticket.users[0].id,
-                'title': ticket.title,
-                'description': ticket.description,
-                'upvotes': ticket.upvotes,
-                'status': ticket.status
-            })
+            temp = ticket.as_dict()
+            temp['user'] = ticket.users[0].as_dict()
+            res.append(temp)
         return make_response(jsonify(res),200)
 
 class ticketid_api(Resource):
     @auth_token_required
     def put(self, ticket_id):
         ticket_data = request.get_json()
-        curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
+        curr_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id)
         
-        if not curr_ticket:
+        if not curr_ticket.first():
             return make_response('ticket with given id not found',404)
         
-        if curr_ticket.status != 'open':
+        if curr_ticket.first().status != 'open':
             return make_response('The ticket is not open and cannot be updated',405)
         
-        if current_user.id != curr_ticket.users.first().id:
+        if current_user.id != curr_ticket.first().users[0].id:
             return make_response('You are not authorised to update the ticket of other users',403)
         
         updated_ticket = curr_ticket.update({
@@ -126,14 +118,10 @@ class ticketid_api(Resource):
         if not curr_ticket:
             return make_response('Not found',404)
         
-        return make_response(jsonify({
-            'ticket_id': ticket_id,
-            'user_id': curr_ticket.users.first().id,
-            'title': curr_ticket.title,
-            'description': curr_ticket.description,
-            'upvotes': curr_ticket.upvotes,
-            'status': curr_ticket.status
-        }), 200)
+        res = curr_ticket.as_dict()
+        res['user'] = curr_ticket.users[0].as_dict()
+        
+        return make_response(jsonify(res), 200)
 
     @auth_token_required
     def delete(ticket_id):
@@ -174,14 +162,9 @@ class Votes_api(Resource):
         
         res = []
         for ticket in top_tickets:
-            res.append({
-                'ticket_id': ticket.ticket_id,
-                'user_id': ticket.users.first().id,
-                'title': ticket.title,
-                'description': ticket.description,
-                'upvotes': ticket.upvotes,
-                'status': ticket.status
-            })
+            temp = ticket.as_dict()
+            temp['user'] = ticket.users[0].as_dict()
+            res.append(temp)
         return make_response(jsonify(res), 200)
 
 class ticketresolve_api(Resource):
