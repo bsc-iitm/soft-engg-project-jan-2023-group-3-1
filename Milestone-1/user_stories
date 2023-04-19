@@ -21,8 +21,8 @@ Support Admin (Tertiary User):
 
     1. As an admin, I want to be able to create a dynamic FAQ list, so that it will be useful to future students and also decrease the burden of 
        tickets on the support staff. 
-    1. As a support admin, I want to be able to update the dynamic FAQ’s page, so that the students can get their doubts clarified without raising a ticket.
-    2. As a support admin, I want to be able to update the important links page, so that the students can refer to various resources without raising a ticket.
+    2. As a support admin, I want to be able to update the dynamic FAQ’s page, so that the students can get their doubts clarified without raising a ticket.
+    3. As a support admin, I want to be able to update the important links page, so that the students can refer to various resources without raising a ticket.
 
 
 
