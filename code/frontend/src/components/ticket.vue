@@ -23,10 +23,10 @@
             <div class="col w-25 text-end">
                 <div v-if="current_user.id == ticket.user.id">
                     <div v-if="isEditing">
-                        <button @click="save_changes()" type="button" class="btn btn-outline-success">
+                        <button @click="save_changes()" type="button" class="btn btn-success">
                             <i class="fa-solid fa-check"></i>
                         </button>
-                        <button @click="ticket_edit()" type="button" class="btn btn-outline-danger">
+                        <button @click="ticket_edit()" type="button" class="btn btn-danger">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -38,10 +38,10 @@
                 </div>
                 <div v-if="current_user.role == 'Support Staff'">
                     <div v-if="isAnswering">
-                        <button @click="answer_ticket()" type="button" class="btn btn-outline-success">
+                        <button @click="answer_ticket()" type="button" class="btn btn-success">
                             <i class="fa-solid fa-check"></i>
                         </button>
-                        <button @click="answering()" type="button" class="btn btn-outline-danger">
+                        <button @click="answering()" type="button" class="btn btn-danger">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -123,7 +123,7 @@
                 axios.post(this.port+url,data,{headers:this.headers})
                 .then((res)=>{
                     console.log(res)
-                    this.isEditing = false
+                    this.isAnswering = false
                     this.$emit('ticket_edited')
                 })
                 .catch((rej)=>{

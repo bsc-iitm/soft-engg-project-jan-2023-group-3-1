@@ -22,7 +22,7 @@
     <div class="py-3 text-center">
         <input v-on:click="login(email,password)" type="submit" value = "Submit" class="btn btn-primary mb-3">
     </div>
-    <p class="text-center">Don't have an account? <a href = 'http://localhost:5000/register'>Sign up</a></p>
+    <p class="text-center">Don't have an account? <a href = 'http://127.0.0.1:5000/register'>Sign up</a></p>
     
 </template>
 

@@ -189,7 +189,10 @@ class faqs_api(Resource):
 class faqid_api(Resource):
     @auth_token_required
     def get(self,f_id):
-        return make_response(faqs.query.filter(faqs.f_id == f_id).first().as_dict(), 200)
+        curr_faq = faqs.query.filter(faqs.f_id == f_id).first()
+        if not curr_faq:
+            return make_response('ticket not found', 404)
+        return make_response(curr_faq.as_dict(), 200)
 
     @auth_token_required
     def put(self,f_id):
@@ -210,7 +213,8 @@ class faqid_api(Resource):
         curr_faq = faqs.query.filter(faqs.f_id == f_id).first()
         if not curr_faq:
             return 404
-        curr_faq.delete()
+        
+        db.session.delete(curr_faq)
         
         db.session.commit()
         

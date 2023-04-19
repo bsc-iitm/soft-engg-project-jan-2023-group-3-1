@@ -28,13 +28,11 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="row">
-			<add_faq v-if="current_user.role == 'Admin'" @added_faq="getfaqs()"></add_faq>
-		</div>
+
 		<div class="row">
 			<div class="col-3">
-				Filter By: <input v-model="search">	
+				Filter By: <input class="form-control" v-model="search">	
+				<add_faq v-if="current_user.role == 'Admin'" @added_faq="getfaqs()"></add_faq>
 			</div>
 			<div class="col-8 mb-3">
 				<faq @faq_edited="update_faq(faq.f_id)" v-for="faq in filtered" :faq="faq" :key="faq.f_id"></faq>
@@ -48,6 +46,7 @@
 <script>
 	import axios from 'axios'
 	import store from '@/store'
+	import router from '@/router'
 	import faq from "../components/faq.vue";
 	import add_faq from '@/components/add_faq.vue';
 	export default {
@@ -98,8 +97,19 @@
 					}
 				}) 
 				.catch((rej)=>{
-					console.log(rej)
+					if(rej.response.status === 404){
+						for(let i=0;i<this.faqs.length;i++){
+							if(this.faqs[i].f_id === f_id){
+								this.faqs.splice(i, 1);
+							}
+						}	
+					}
 				})
+			},
+			logout(){
+				store.commit('logout')
+				console.log(store.state.logged_in)
+				router.push('/')
 			}
 		},
 		async mounted() {

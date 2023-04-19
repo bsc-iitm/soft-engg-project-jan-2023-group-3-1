@@ -60,7 +60,7 @@
 						<option>date completed</option>
 					</select>
 				</div>
-				<add_ticket @added_ticket="gettickets()"></add_ticket>
+				<add_ticket v-if="current_user.role == 'Student'" @added_ticket="gettickets()"></add_ticket>
 			</div>
 			<div class="col-8 mb-3">
 				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered.slice(0,limit)" :ticket="ticket" :key="ticket.ticket_id"></ticket>
@@ -74,9 +74,10 @@
 <script>
 	import axios from 'axios'
 	import store from '@/store'
+	import router from '@/router'
 	import ticket from "../components/ticket.vue";
 	import add_ticket from '@/components/add_ticket.vue';
-import router from '@/router';
+
 	export default {
 		name: "TicketsPage",
 		data(){
@@ -187,12 +188,20 @@ import router from '@/router';
 			},
 			logout(){
 				store.commit('logout')
-				router.push('Login')
+				console.log('the user is',store.state.logged_in)
+				router.push('/')
 			}
+		},
+		updated(){
+			this.current_user = store.state.user
+			this.auth_token = store.state.auth_token
+			this.headers = {
+				'Content-Type': 'application/json',
+				'Authentication-Token': this.auth_token
+				}
 		},
 		async mounted() {
 			this.current_user = store.state.user
-			console.log(store.state.user)
 			this.auth_token = store.state.auth_token
 			this.headers = {
 				'Content-Type': 'application/json',
