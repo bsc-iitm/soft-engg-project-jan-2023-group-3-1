@@ -12,11 +12,14 @@
                 <i :class="{'fa-chevron-up': isOpen, 'fa-chevron-down': !isOpen}" class="fas fa-chevron-down"></i>
             </div>
         </div>
-        <div class="row d-flex align-items-center border bg-light text-dark" v-if="isOpen" name="desc_dropdown">
-            <p v-if="!isEditing" class="col w-75 text-start m-0">{{ticket.description}}</p>
-            <input v-else class="col-1 w-75 text-start m-0 f" v-model="ticketcopy.description">
-            <input v-if="isAnswering" class="col-1 w-75 text-start m-0 f" v-model="ticketcopy.response">
-            <p v-else-if="ticket.status == 'closed'" class="col-1 w-75 text-start m-0 f">Response.) {{ ticket.response }}</p>
+        <div class="row d-flex align-items-center border bg-secondary " v-if="isOpen" name="desc_dropdown">
+            <div class="col w-75 text-start m-0">
+                <p v-if="!isEditing" class="row">{{ticket.description}}</p>
+                <input v-else class="row" v-model="ticketcopy.description">
+                <input v-if="isAnswering" class="row" v-model="ticketcopy.response">
+                <p v-else-if="ticket.status == 'closed'" class="row text-black">Response: {{ ticket.response }}</p>
+            </div>
+            
             <div class="col w-25 text-end">
                 <div v-if="current_user.id == ticket.user.id">
                     <div v-if="isEditing">
