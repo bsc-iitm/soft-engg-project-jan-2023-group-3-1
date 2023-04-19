@@ -53,29 +53,6 @@ class tickets_api(Resource):
         except:
            return make_response('Could no add the ticket',400)
         return make_response(f'Added ticket with id-{ticket_id}', 201)
-
-    @auth_token_required
-    def get(self,useronly, status, limit):
-        tickets = Tickets.query()
-        
-        if useronly:
-            if current_user.roles[0].name == 'Student':
-                tickets = tickets.filter(Tickets.ticket_id == tickets_users.ticket_id)\
-                                .filter(tickets_users.id == current_user.id)
-            else:
-                tickets = tickets.filter(Tickets.ticket_id == resolvedby.ticket_id)\
-                                .filter(resolvedby.id == current_user.id)
-        if status:
-            tickets = tickets.filter(Tickets.status == status)
-            
-        tickets = tickets.limit(limit)
-        
-        res = []
-        for ticket in tickets:
-            temp = ticket.as_dict()
-            temp['user'] = ticket.users[0].as_dict()
-            res.append(temp)
-        return make_response(jsonify(res),200)
     
     @auth_token_required
     def get(self):
@@ -84,6 +61,9 @@ class tickets_api(Resource):
         for ticket in all_tickets:
             temp = ticket.as_dict()
             temp['user'] = ticket.users[0].as_dict()
+            if ticket.status == 'closed':
+                staff = User.query.filter(resolvedby.ticket_id == ticket.ticket_id).filter(resolvedby.id == User.id).first()
+                temp['staff'] = staff.as_dict()
             res.append(temp)
         return make_response(jsonify(res),200)
 
@@ -120,7 +100,9 @@ class ticketid_api(Resource):
         
         res = curr_ticket.as_dict()
         res['user'] = curr_ticket.users[0].as_dict()
-        
+        if curr_ticket.status == 'closed':
+            staff = User.query.filter(resolvedby.ticket_id == curr_ticket.ticket_id).filter(resolvedby.id == User.id).first()
+            res['staff'] = staff.as_dict()
         return make_response(jsonify(res), 200)
 
     @auth_token_required

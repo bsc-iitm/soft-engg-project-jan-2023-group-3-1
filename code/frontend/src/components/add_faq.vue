@@ -35,7 +35,7 @@
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" v-on:click="addfaq()">Submit</button>
+					<button type="button" class="btn btn-primary" v-on:click="addfaq()" data-bs-dismiss>Submit</button>
 					</div>
 				</div>
 			</div>

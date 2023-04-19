@@ -1,10 +1,34 @@
 <template>
 	<div >
-		<nav>
-			<h1>This is the FAQs page</h1>
-			<router-link to="/tickets">Tickets</router-link> |
-			<router-link to="/faqs">FAQs</router-link>
-		</nav>
+		<div class="row">
+			<h1 class="col">Tickets</h1>
+			<div class="col text-end p-3">
+				<router-link class="btn btn-outline-dark" to="/tickets">Tickets</router-link>
+				<button type="button" class="btn btn-link-dark" data-bs-toggle="modal" data-bs-target="#profile">
+					<i class="fa-solid fa-user fa-2xl"></i>
+				</button>
+
+				<div class="modal fade profile-int" id="profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+					<div class="modal-dialog position-absolute" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">User Profile</h4>
+								<button class="btn btn-outline-danger" data-bs-dismiss="modal">
+									<i class="fa-solid fa-xmark"></i>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p>Username: {{ current_user.username }}</p>
+								<p>Email: {{ current_user.email }}</p>
+								<p>Role: {{ current_user.role }}</p>
+								<button class="btn btn-outline-danger" @click="logout()">Logout</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<div class="row">
 			<add_faq v-if="current_user.role == 'Admin'" @added_faq="getfaqs()"></add_faq>
 		</div>

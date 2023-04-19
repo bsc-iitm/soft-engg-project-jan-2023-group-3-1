@@ -1,23 +1,56 @@
 <template>
-	<div >
-		<nav>
-			<h1>This is the tickets page</h1>
-			<router-link to="/tickets">Tickets</router-link> |
-			<router-link to="/faqs">FAQs</router-link>
-		</nav>
+	<div>
 		<div class="row">
-			<add_ticket @added_ticket="gettickets()"></add_ticket>
-		</div>
-		<div class="row">
-			<div class="col-3">
-				Filter By: <input v-model="search">	
-				Limit to: <input v-model="limit">	
-			
-			<div class="tags-wrapper">
-				<div v-for="(filter, index) in filters" :key="index">
-					<button @click="this.activeFilter=filter" :class="{ active: filter === this.activeFilter }">{{ filter }}</button>
+			<h1 class="col">Tickets</h1>
+			<div class="col text-end p-3">
+				<router-link class="btn btn-outline-dark" to="/faqs">FAQs</router-link>
+				<button type="button" class="btn btn-link-dark" data-bs-toggle="modal" data-bs-target="#profile">
+					<i class="fa-solid fa-user fa-2xl"></i>
+				</button>
+
+				<div class="modal fade profile-int" id="profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+					<div class="modal-dialog position-absolute" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">User Profile</h4>
+								<button class="btn btn-outline-danger" data-bs-dismiss="modal">
+									<i class="fa-solid fa-xmark"></i>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p>Username: {{ current_user.username }}</p>
+								<p>Email: {{ current_user.email }}</p>
+								<p>Role: {{ current_user.role }}</p>
+								<button class="btn btn-outline-danger" @click="logout()">Logout</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-3">
+				<div class="row p-3">
+					Filter By: <input v-model="search">	
+				</div>
+				<div class="row p-3">
+					Limit to: <input v-model="limit">	
+				</div>
+				<div class="container">
+					<label class="ps-3 pe-3" for="all">All</label>
+					<input type="radio" id="all" value="all" v-model="ticket_status" />
+					
+					<label class="ps-3 pe-3" for="openonly">Open</label>
+					<input type="radio" id="openonly" value="open" v-model="ticket_status" />
+					
+					<label class="ps-3 pe-3" for="closedonly">Closed</label>
+					<input type="radio" id="closedonly" value="closed" v-model="ticket_status" />
+					
+					<label class="p-3" for="useronly">My tickets</label>
+					<input type="checkbox" id="useronly" v-model="useronly" />
+				</div>
+				<add_ticket @added_ticket="gettickets()"></add_ticket>
 			</div>
 			<div class="col-8 mb-3">
 				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered.slice(0,limit)" :ticket="ticket" :key="ticket.ticket_id"></ticket>
@@ -33,6 +66,7 @@
 	import store from '@/store'
 	import ticket from "../components/ticket.vue";
 	import add_ticket from '@/components/add_ticket.vue';
+import router from '@/router';
 	export default {
 		name: "TicketsPage",
 		data(){
@@ -45,9 +79,9 @@
 				title: '',
 				desc: '',
 				search: '',
-				filters: ['All','Open','Closed','My Tickets'],
-				activeFilter: 'All',
-				limit: 100
+				limit: 100,
+				ticket_status:'all',
+				useronly:false,
 			}
 		},
 		computed: {
@@ -55,14 +89,21 @@
 				if (!this.tickets){
 					return []
 				}
-				if (this.activeFilter === 'All') {
-					return this.tickets.filter((item) => item.title.includes(this.search));
-				}
-				if (this.activeFilter === 'My Tickets') {
-					return this.tickets.filter((item) => item.user.id === this.current_user.id);
+				let filter_tickets = [...this.tickets]
+				
+				filter_tickets = filter_tickets.filter((item)=> item.title.includes(this.search))
+				
+				if (this.useronly) {
+					filter_tickets = filter_tickets.filter((item) => item.user.id === this.current_user.id 
+													|| (item.status == 'closed' && item.staff.id == this.current_user.id))
+
 				}
 				
-				return this.tickets.filter((item) => item.status === this.activeFilter.toLowerCase()).filter((item) => item.title.includes(this.search));
+				if (this.ticket_status === 'all') {
+					return filter_tickets
+				}
+				
+				return filter_tickets.filter((item) => item.status === this.ticket_status.toLowerCase());
 				
 			}
 		},
@@ -109,6 +150,10 @@
 						}	
 					}
 				})
+			},
+			logout(){
+				store.commit('logout')
+				router.push('Login')
 			}
 		},
 		async mounted() {
@@ -123,3 +168,22 @@
 		}
 	}
 </script>
+
+<style>
+	.modal-dialog {
+		right:10px;
+		top: 30px;
+	}
+	.profile-int {
+		pointer-events: none;
+	}
+	.modal-open {
+		overflow-y: auto;
+	}
+	.profile-int .modal-backdrop {
+		display: none;
+	}
+	.navigation-bar {
+		background: #757474;
+	}
+</style>

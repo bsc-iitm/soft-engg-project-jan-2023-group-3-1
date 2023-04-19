@@ -1,15 +1,13 @@
 <template>
     <div class="container mb-3 border">
-        <div class="row">
-            <h5> {{ ticket.user.username }}</h5>
-        </div>
         <div class="row d-flex align-items-center border">
             <button @click="upvote()" type="button" :class="{'col-1 btn':!isUpvoted, 'col-1 btn text-success':isUpvoted}" class="col-1 btn">
                 <i class="fa-solid fa-up-long"></i>
             </button>
             <h5 class="col-1 m-0">{{ticket.upvotes}}</h5>
-            <p v-if="!isEditing" class="col m-0">{{ticket.title}}</p>
+            <h5 v-if="!isEditing" class="col m-0">{{ticket.title}}</h5>
             <input v-else class="col m-0 " v-model="ticketcopy.title">
+            <p class="col-2 m-0">by {{ ticket.user.username }}</p>
             <div class="col-1 text-end" @click="toggleDropdown">
                 <i :class="{'fa-chevron-up': isOpen, 'fa-chevron-down': !isOpen}" class="fas fa-chevron-down"></i>
             </div>
@@ -168,7 +166,7 @@
                 var hours = minutes/60
                 var days = hours/24
                 var weeks = days/7
-                var months = weeks/30
+                var months = weeks/4
                 var years = months/12
 
                 if(years > 1){

@@ -1,11 +1,9 @@
 <template>
-	<div>
-		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-			Add ticket
+	<div class="row">
+		<button type="button" class="btn btn-outline-success btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">
+			Add ticket +
 		</button>
 
-	<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -35,7 +33,7 @@
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" v-on:click="addticket()">Submit</button>
+					<button type="button" class="btn btn-primary" v-on:click="addticket()" data-bs-dismiss="modal">Submit</button>
 					</div>
 				</div>
 			</div>
