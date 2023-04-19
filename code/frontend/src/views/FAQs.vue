@@ -62,6 +62,20 @@
 				.catch((rej)=>{
 					console.log(rej)
 				})
+			},
+			update_faq(f_id){
+				const path = `faqs/${f_id}`
+				axios.get(this.port+path,{headers:this.headers})
+				.then((res)=>{
+					for(let i=0;i<this.faqs.length;i++){
+						if(this.faqs[i].f_id == f_id){
+							this.faqs[i] = res.data
+						}
+					}
+				}) 
+				.catch((rej)=>{
+					console.log(rej)
+				})
 			}
 		},
 		async mounted() {

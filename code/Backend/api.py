@@ -175,6 +175,7 @@ class ticketresolve_api(Resource):
         ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
         ticket.response = response
         ticket.status = 'closed'
+        ticket.date_closed = currtime()
         
         if resolvedby.query.filter(resolvedby.ticket_id == ticket.ticket_id).first():
             db.session.commit()
@@ -206,15 +207,15 @@ class faqs_api(Resource):
 class faqid_api(Resource):
     @auth_token_required
     def get(self,f_id):
-        return make_response(faqs.query.filter(faqs.f_id == f_id).first(), 200)
+        return make_response(faqs.query.filter(faqs.f_id == f_id).first().as_dict(), 200)
 
     @auth_token_required
     def put(self,f_id):
         faq_data = request.get_json()
         
-        curr_faq = faqs.query.filter(faqs.f_id == f_id).first()
+        curr_faq = faqs.query.filter(faqs.f_id == f_id)
         
-        if not curr_faq:
+        if not curr_faq.first():
             return make_response('FAQ with given id not found',404)
         updated_faq = curr_faq.update({'question':faq_data['question'],
                                        'answer':faq_data['answer']})

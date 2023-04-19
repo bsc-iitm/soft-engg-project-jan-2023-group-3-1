@@ -1,6 +1,29 @@
 <template>
-    <h5 class="row">{{ faq.question }}</h5>
-    <p class="row">{{ faq.answer }}</p>
+    <input v-if="isEditing" v-model="faqcopy.question">
+    <h5 v-else class="row">{{ faq.question }}</h5>
+    <div class="row">
+        <input v-if="isEditing" v-model="faqcopy.answer">
+        <p v-else class="col">{{ faq.answer }}</p>
+        <div class="col w-25 text-end">
+            <div v-if="isEditing">
+                <button @click="save_changes()" type="button" class="btn btn-outline-success">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+                <button @click="faq_edit()" type="button" class="btn btn-outline-danger">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div v-else>
+                <button @click="faq_edit()" type="button" class="btn">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button @click="faq_delete()" type="button" class="col btn btn-outline-danger">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
 </template>
 
 <script>
@@ -10,6 +33,9 @@
         name:"FAQBlock",
         props:{
             faq: {},
+        },
+        emits:{
+            faq_edited: null,
         },
         data(){
 			return {
@@ -26,11 +52,12 @@
                 this.faqcopy = {...this.faq}
                 this.isEditing = !this.isEditing
             },
+            
             save_changes(){
                 const faq_id = this.faq.f_id
-                const url = `faq/${faq_id}`
-                const data = {'title':this.faqcopy.title,
-                            'description': this.faqcopy.description}
+                const url = `faqs/${faq_id}`
+                const data = {'question':this.faqcopy.question,
+                            'answer': this.faqcopy.answer}
                 axios.put(this.port+url,data,{headers:this.headers})
                 .then((res)=>{
                     console.log(res)
