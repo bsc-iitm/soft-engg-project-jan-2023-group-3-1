@@ -9,7 +9,7 @@
 			<add_faq @added_faq="getfaqs()"></add_faq>
 		</div>
 		<div class="row">
-			<div class="col-2">
+			<div class="col-3">
 				Filter By: <input v-model="search">	
 			</div>
 			<div class="col-8 mb-3">
@@ -49,7 +49,7 @@
 			}
 		},
 		components: {
-			ticket,
+			faq,
 			add_faq
 		},
 		methods:{

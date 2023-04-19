@@ -9,14 +9,15 @@
 			<add_ticket @added_ticket="gettickets()"></add_ticket>
 		</div>
 		<div class="row">
-			<div class="col-2">
+			<div class="col-3">
 				Filter By: <input v-model="search">	
 				Limit to: <input v-model="limit">	
-			</div>
+			
 			<div class="tags-wrapper">
 				<div v-for="(filter, index) in filters" :key="index">
 					<button @click="this.activeFilter=filter" :class="{ active: filter === this.activeFilter }">{{ filter }}</button>
 				</div>
+			</div>
 			</div>
 			<div class="col-8 mb-3">
 				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered.slice(0,limit)" :ticket="ticket" :key="ticket.ticket_id"></ticket>
