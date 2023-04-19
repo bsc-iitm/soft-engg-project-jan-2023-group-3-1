@@ -58,7 +58,7 @@
 					}}
                     axios.post('http://localhost:5000/user',body,config)
                     .then((res) =>{
-                        store.commit('update_user',res.data)
+                        store.commit('update_user',{...res.data})
                         console.log("success",store.state.user)
                     })
                     .catch((rej)=>{

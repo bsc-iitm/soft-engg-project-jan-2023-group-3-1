@@ -10,3 +10,4 @@ matplotlib
 requests
 redis
 pandas
+werkzeug==2.1.2

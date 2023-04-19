@@ -28,7 +28,7 @@ def dated_url_for(endpoint, **values):
 
 @app.route('/',methods=['GET','POST'])
 def homepage():
-    return redirect('http://localhost:8080/')
+    return redirect('http://localhost:8082/')
 
 @app.route('/roleselect', methods=['GET','POST'])
 @login_required
@@ -45,4 +45,4 @@ def role_select():
         adding_relation = user_role(id = curr_id,role_id=role)
         db.session.add(adding_relation)
         db.session.commit()
-        return redirect('http://192.168.1.5:8080/')
+        return redirect('http://192.168.1.5:8082/')

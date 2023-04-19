@@ -16,7 +16,7 @@ app.config.from_object(LocalDevelopmentConfig)
 db.init_app(app)
 app.app_context().push()
 
-CORS(app, origins="*",resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 api = Api(app)
 
@@ -30,7 +30,7 @@ from Backend.api import *
 
 api.add_resource(user_api, '/user')
 api.add_resource(tickets_api,'/tickets')
-api.add_resource(ticketid_api,'/<int:ticket_id>')
+api.add_resource(ticketid_api,'/ticket/<int:ticket_id>')
 api.add_resource(Votes_api,'/tickets/upvote')
 api.add_resource(ticketresolve_api, '/tickets/<int:ticket_id>/answer')
 api.add_resource(faqs_api, '/faqs')
