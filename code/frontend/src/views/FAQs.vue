@@ -1,12 +1,12 @@
 <template>
 	<div >
 		<nav>
-			<h1>This is the tickets page</h1>
+			<h1>This is the FAQs page</h1>
 			<router-link to="/tickets">Tickets</router-link> |
 			<router-link to="/faqs">FAQs</router-link>
 		</nav>
 		<div class="row">
-			<add_faq @added_faq="getfaqs()"></add_faq>
+			<add_faq v-if="current_user.role == 'Admin'" @added_faq="getfaqs()"></add_faq>
 		</div>
 		<div class="row">
 			<div class="col-3">

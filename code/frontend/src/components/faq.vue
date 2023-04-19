@@ -1,25 +1,29 @@
 <template>
-    <input v-if="isEditing" v-model="faqcopy.question">
-    <h5 v-else class="row">{{ faq.question }}</h5>
-    <div class="row">
-        <input v-if="isEditing" v-model="faqcopy.answer">
-        <p v-else class="col">{{ faq.answer }}</p>
-        <div class="col w-25 text-end">
-            <div v-if="isEditing">
-                <button @click="save_changes()" type="button" class="btn btn-outline-success">
-                    <i class="fa-solid fa-check"></i>
-                </button>
-                <button @click="faq_edit()" type="button" class="btn btn-outline-danger">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div v-else>
-                <button @click="faq_edit()" type="button" class="btn">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button @click="faq_delete()" type="button" class="col btn btn-outline-danger">
-                    <i class="fa-regular fa-trash-can"></i>
-                </button>
+    <div class="container border">
+        <div class="row d-flex">
+            <input v-if="isEditing" v-model="faqcopy.question">
+            <h5 v-else>Q. {{ faq.question }}</h5>
+        </div>
+        <div class="row">
+            <input v-if="isEditing" v-model="faqcopy.answer">
+            <p v-else class="col">ans. {{ faq.answer }}</p>
+            <div v-if="current_user.role == 'Admin'" class="col-1 w-25 text-end">
+                <div v-if="isEditing">
+                    <button @click="save_changes()" type="button" class="btn btn-outline-success">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                    <button @click="faq_edit()" type="button" class="btn btn-outline-danger">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div v-else>
+                    <button @click="faq_edit()" type="button" class="btn">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button @click="faq_delete()" type="button" class="col btn btn-outline-danger">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
