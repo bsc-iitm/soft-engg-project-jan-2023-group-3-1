@@ -42,6 +42,9 @@
 		},
 		computed: {
 			filtered() {
+				if(!this.tickets){
+					return []
+				}
 				return this.tickets.filter((item) => item.title.includes(this.search));
 			}
 		},

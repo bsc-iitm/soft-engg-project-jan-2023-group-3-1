@@ -26,7 +26,7 @@ export default createStore({
       state.auth_token = token
     },
     update_user(state, user){
-      state.user = {...user}
+      state.user = user
     }
   },
   plugins: [vuexPersist.plugin]

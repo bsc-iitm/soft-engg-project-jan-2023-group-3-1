@@ -1,7 +1,7 @@
 <template>
     <div class="mb-3">
     <div class="row border d-flex align-items-center">
-        <button @click="upvote()" type="button" class="col-1 btn">
+        <button @click="upvote()" type="button" :class="{'col-1 btn':!isUpvoted, 'col-1 btn text-success':isUpvoted}" class="col-1 btn">
             <i class="fa-solid fa-up-long"></i>
         </button>
         <h5 class="col-1 m-0">{{ticket.upvotes}}</h5>
@@ -63,7 +63,8 @@
 				headers: {},
                 isOpen: false,
                 isEditing: false,
-                isStaff: true
+                isStaff: true,
+                isUpvoted: false,
 			}
 		},
         methods:{
@@ -112,7 +113,10 @@
                             'ticket_id': this.ticketcopy.ticket_id}
                 axios.put(this.port+url,data,{headers:this.headers})
                 .then((res)=>{
-                    console.log(this.ticketcopy,res)
+                    if(res.data == 'post upvoted successfully'){
+                        this.isUpvoted = true
+                    }
+                    else this.isUpvoted = false
                     this.$emit('ticket_edited')
                 })
                 .catch((rej)=>{

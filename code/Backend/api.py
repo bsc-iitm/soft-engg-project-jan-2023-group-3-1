@@ -175,16 +175,17 @@ class ticketresolve_api(Resource):
         ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id).first()
         ticket.response = response
         ticket.status = 'closed'
+        
+        if resolvedby.query.filter(resolvedby.ticket_id == ticket.ticket_id).first():
+            db.session.commit()
+            return make_response('Response updated successfully',200)
+        
         resolved_rec = resolvedby(ticket_id = ticket.ticket_id, id= current_user.id)
         
         db.session.add(resolved_rec)
         db.session.commit()
 
-        return make_response('',200)
-    
-    @auth_token_required
-    def put(self, ticket_id):
-        return self.post(ticket_id)
+        return make_response('tciket successfully resolved',200)
 
 class faqs_api(Resource):
     @auth_token_required

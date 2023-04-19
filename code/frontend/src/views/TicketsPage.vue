@@ -51,6 +51,9 @@
 		},
 		computed: {
 			filtered() {
+				if (!this.tickets){
+					return []
+				}
 				if (this.activeFilter === 'All') {
 					return this.tickets.filter((item) => item.title.includes(this.search));
 				}
