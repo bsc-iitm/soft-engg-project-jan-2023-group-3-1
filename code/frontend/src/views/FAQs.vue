@@ -13,7 +13,7 @@
 				Filter By: <input v-model="search">	
 			</div>
 			<div class="col-8 mb-3">
-				<ticket @ticket_edited="update_ticket(ticket.ticket_id)" v-for="ticket in filtered" :ticket="ticket" :key="ticket.ticket_id"></ticket>
+				<faq @faq_edited="update_faq(faq.f_id)" v-for="faq in filtered" :faq="faq" :key="faq.f_id"></faq>
 			</div>
 		</div>
 
@@ -24,7 +24,7 @@
 <script>
 	import axios from 'axios'
 	import store from '@/store'
-	import ticket from "../components/ticket.vue";
+	import faq from "../components/faq.vue";
 	import add_faq from '@/components/add_faq.vue';
 	export default {
 		name: "FAQs",
@@ -42,10 +42,10 @@
 		},
 		computed: {
 			filtered() {
-				if(!this.tickets){
+				if(!this.faqs){
 					return []
 				}
-				return this.tickets.filter((item) => item.title.includes(this.search));
+				return this.faqs.filter((item) => item.question.includes(this.search));
 			}
 		},
 		components: {

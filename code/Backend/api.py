@@ -190,7 +190,7 @@ class ticketresolve_api(Resource):
 class faqs_api(Resource):
     @auth_token_required
     def get(self):
-        return make_response(faqs.query.all(), 200)
+        return make_response([faq.as_dict() for faq in faqs.query.all()], 200)
 
     @auth_token_required
     def post(self):
@@ -201,7 +201,7 @@ class faqs_api(Resource):
         db.session.add(new_faq)
         db.session.commit()
 
-        return make_response('',201)
+        return make_response('faq added successfuly',201)
 
 class faqid_api(Resource):
     @auth_token_required

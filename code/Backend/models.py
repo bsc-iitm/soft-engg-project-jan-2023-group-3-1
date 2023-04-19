@@ -66,3 +66,6 @@ class faqs(db.Model):
     f_id = db.Column(db.Integer, nullable=False, unique=True, primary_key=True)
     question = db.Column(db.String, nullable=False)
     answer = db.Column(db.String, nullable=False)
+    
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
