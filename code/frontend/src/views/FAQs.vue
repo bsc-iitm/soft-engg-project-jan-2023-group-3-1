@@ -1,7 +1,7 @@
 <template>
 	<div >
 		<div class="row">
-			<h1 class="col">Tickets</h1>
+			<h1 class="col">FAQs</h1>
 			<div class="col text-end p-3">
 				<router-link class="btn btn-outline-dark" to="/tickets">Tickets</router-link>
 				<button type="button" class="btn btn-link-dark" data-bs-toggle="modal" data-bs-target="#profile">

@@ -1,7 +1,7 @@
 <template>
-    <div class="container mb-3 border">
+    <div class="container mb-3 border bg-dark text-light">
         <div class="row d-flex align-items-center border">
-            <button @click="upvote()" type="button" :class="{'col-1 btn':!isUpvoted, 'col-1 btn text-success':isUpvoted}" class="col-1 btn">
+            <button @click="upvote()" type="button" :class="{'col-1 btn-link text-light':!isUpvoted, 'col-1 btn-link text-success':isUpvoted}" class="col-1 btn">
                 <i class="fa-solid fa-up-long"></i>
             </button>
             <h5 class="col-1 m-0">{{ticket.upvotes}}</h5>
@@ -12,11 +12,11 @@
                 <i :class="{'fa-chevron-up': isOpen, 'fa-chevron-down': !isOpen}" class="fas fa-chevron-down"></i>
             </div>
         </div>
-        <div class="row d-flex align-items-center border" v-if="isOpen" name="desc_dropdown">
+        <div class="row d-flex align-items-center border bg-light text-dark" v-if="isOpen" name="desc_dropdown">
             <p v-if="!isEditing" class="col w-75 text-start m-0">{{ticket.description}}</p>
             <input v-else class="col-1 w-75 text-start m-0 f" v-model="ticketcopy.description">
             <input v-if="isAnswering" class="col-1 w-75 text-start m-0 f" v-model="ticketcopy.response">
-            <p v-else class="col-1 w-75 text-start m-0 f">{{ ticket.response }}</p>
+            <p v-else-if="ticket.status == 'closed'" class="col-1 w-75 text-start m-0 f">Response.) {{ ticket.response }}</p>
             <div class="col w-25 text-end">
                 <div v-if="current_user.id == ticket.user.id">
                     <div v-if="isEditing">
@@ -55,11 +55,11 @@
         </div>
         <div class="row d-flex align-items-center">
             <p class="col-4 text-start m-0">Last modified {{time_to_text(ticket.last_modified)}}</p>
-            <p class="col text-start m-0">Created {{time_to_text(ticket.date_created)}}</p>
-            <p v-if="ticket.status == 'closed'" class="col text-start m-0"> Closed {{ time_to_text(ticket.date_closed) }}</p>
-            <div v-if="ticket.date_closed" class="col text-end">
-                <i class="text-success fa-solid fa-check fa-2x"></i>
-            </div>
+            <p class="col text-center m-0">Created {{time_to_text(ticket.date_created)}}</p>
+            <p v-if="ticket.status == 'closed'" class="col text-end m-0">
+                <i class="text-success fa-solid fa-check"></i> Closed {{ time_to_text(ticket.date_closed) }} 
+            </p>
+            <div v-else class="col"></div>
         </div>
     </div>
 </template>

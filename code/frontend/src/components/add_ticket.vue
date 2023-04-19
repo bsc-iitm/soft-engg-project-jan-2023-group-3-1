@@ -1,5 +1,5 @@
 <template>
-	<div class="row">
+	<div class="row p-3">
 		<button type="button" class="btn btn-outline-success btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">
 			Add ticket +
 		</button>

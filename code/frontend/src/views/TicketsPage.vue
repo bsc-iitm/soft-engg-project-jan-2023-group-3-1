@@ -32,10 +32,10 @@
 		<div class="row">
 			<div class="col-3">
 				<div class="row p-3">
-					Filter By: <input v-model="search">	
+					Filter By: <input class="form-control" v-model="search">	
 				</div>
 				<div class="row p-3">
-					Limit to: <input v-model="limit">	
+					Limit to: <input class="form-control" v-model="limit">	
 				</div>
 				<div class="container">
 					<label class="ps-3 pe-3" for="all">All</label>
@@ -49,6 +49,16 @@
 					
 					<label class="p-3" for="useronly">My tickets</label>
 					<input type="checkbox" id="useronly" v-model="useronly" />
+				</div>
+				<div class="p-3">
+					<label for="sorter">Sort by:</label>
+					<select class="form-select" v-model="sortby" id="sorter">
+						<option disabled value="">Please select one</option>
+						<option>upvotes</option>
+						<option>last modified</option>
+						<option>date created</option>
+						<option>date completed</option>
+					</select>
 				</div>
 				<add_ticket @added_ticket="gettickets()"></add_ticket>
 			</div>
@@ -82,6 +92,7 @@ import router from '@/router';
 				limit: 100,
 				ticket_status:'all',
 				useronly:false,
+				sortby:'last modified',
 			}
 		},
 		computed: {
@@ -98,13 +109,36 @@ import router from '@/router';
 													|| (item.status == 'closed' && item.staff.id == this.current_user.id))
 
 				}
-				
-				if (this.ticket_status === 'all') {
-					return filter_tickets
+				if (this.ticket_status !== 'all') {
+					filter_tickets = filter_tickets.filter((item) => item.status === this.ticket_status.toLowerCase());
 				}
-				
-				return filter_tickets.filter((item) => item.status === this.ticket_status.toLowerCase());
-				
+				if( this.sortby == 'upvotes'){
+					filter_tickets = filter_tickets.sort((first,second)=>{
+						return second.upvotes - first.upvotes;
+					})
+				}
+				if(this.sortby == 'last modified'){
+					filter_tickets = filter_tickets.sort((first,second)=>{
+						let second_date = new Date(second.last_modified)
+						let first_date = new Date(first.last_modified)
+						return second_date-first_date;
+					})
+				}
+				if(this.sortby == 'date created'){
+					filter_tickets = filter_tickets.sort((first,second)=>{
+						let second_date = new Date(second.date_created)
+						let first_date = new Date(first.date_created)
+						return second_date-first_date;
+					})
+				}
+				if(this.sortby == 'date closed'){
+					filter_tickets = filter_tickets.sort((first,second)=>{
+						let second_date = new Date(second.date_created)
+						let first_date = new Date(first.date_created)
+						return second_date-first_date;
+					})
+				}
+				return filter_tickets
 			}
 		},
 		components: {
