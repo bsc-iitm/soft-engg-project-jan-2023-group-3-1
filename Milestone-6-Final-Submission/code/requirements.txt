@@ -1,0 +1,13 @@
+Flask
+Flask-Cors
+Flask-SQLAlchemy
+flask-restful
+flask-security-too
+bleach
+Flask-Caching
+numpy
+matplotlib
+requests
+redis
+pandas
+werkzeug==2.1.2

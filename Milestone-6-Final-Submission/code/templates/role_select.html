@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+    <title>Role Select</title>
+    <link href="/static/css/main.css" rel="stylesheet" >
+</head>
+<body>
+    <h1 class="text-center fw-bold display-4">Select a role</h1>
+    <form action="/roleselect" method="POST" id="role_select" class="container px-5 text-center">
+        <div class="container col-5 text-center">
+            <select name="role" class="form-select" required>
+                <option selected>Please select a role</option>
+                {% for role in roles %}
+                <option value={{role.role_id}}>{{role.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="py-3 text-center">
+            <input type="submit" value = "Submit" class="btn btn-primary mb-3">
+        </div>
+    </form>
+</body>
