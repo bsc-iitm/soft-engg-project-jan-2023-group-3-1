@@ -124,11 +124,11 @@ class ticketid_api(Resource):
         return make_response(jsonify(res), 200)
 
     @auth_token_required
-    def delete(ticket_id):
+    def delete(self, ticket_id):
         current_ticket = Tickets.query.filter(Tickets.ticket_id == ticket_id ).first()
         if not current_ticket:
             return make_response('ticket with given id not found',404)
-        current_ticket.delete()
+        db.session.delete(current_ticket)
         db.session.commit()
         return make_response('deleted successfully',204)
 

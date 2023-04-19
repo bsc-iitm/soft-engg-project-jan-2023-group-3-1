@@ -101,7 +101,13 @@
 					}
 				}) 
 				.catch((rej)=>{
-					console.log(rej)
+					if(rej.response.status === 404){
+						for(let i=0;i<this.tickets.length;i++){
+							if(this.tickets[i].ticket_id === ticket_id){
+								this.tickets.splice(i, 1);
+							}
+						}	
+					}
 				})
 			}
 		},

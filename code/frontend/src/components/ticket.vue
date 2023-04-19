@@ -33,9 +33,6 @@
                         <button @click="ticket_edit()" type="button" class="btn">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button @click="ticket_delete()" type="button" class="col btn btn-outline-danger">
-                            <i class="fa-regular fa-trash-can"></i>
-                        </button>
                     </div>
                 </div>
                 <div v-if="current_user.role == 'Support Staff'">
@@ -50,6 +47,9 @@
                     <div v-else>
                         <button @click="answering()" type="button" class="btn">
                             <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                        <button @click="ticket_delete()" type="button" class="col btn btn-outline-danger">
+                            <i class="fa-regular fa-trash-can"></i>
                         </button>
                     </div>
                 </div>
@@ -123,6 +123,19 @@
                 .then((res)=>{
                     console.log(res)
                     this.isEditing = false
+                    this.$emit('ticket_edited')
+                })
+                .catch((rej)=>{
+                    console.log(rej)
+                })
+
+            },
+            ticket_delete(){
+                const ticket_id = this.ticket.ticket_id
+                const url = `ticket/${ticket_id}`
+                axios.delete(this.port+url,{headers:this.headers})
+                .then((res)=>{
+                    console.log(res)
                     this.$emit('ticket_edited')
                 })
                 .catch((rej)=>{
